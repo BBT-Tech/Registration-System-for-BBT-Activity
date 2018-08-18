@@ -1,23 +1,94 @@
 # 前后端对接文档
-### 管理员发起活动
+### 管理员发起志愿者活动
 - 权限级别：管理员
-- 接口地址：`*.php`
+- 路由：`/api/manager/publish/volunteer`
 - 请求方法：`POST`
 - 请求参数：
     - 示例：
         ```json
-        // 志愿者活动
         {
-            "type": 0,
             "title": "Some Fun",
             "details": "Help the lazy dog jump over the quick brown fox.",
             "actionTime": "2018-09-16 00:00:00",
             "member": 80
         }
-
-        // 福利活动
+        ```
+    - 说明
+        <table>
+            <thead>
+                <tr>
+                    <th>参数名称</th>
+                    <th>参数类型</th>
+                    <th>参数说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>title</td>
+                    <td>string</td>
+                    <td>活动标题。</td>
+                </tr>
+                <tr>
+                    <td>details</td>
+                    <td>string</td>
+                    <td>活动详情。</td>
+                </tr>
+                <tr>
+                    <td>actionTime</td>
+                    <td>string</td>
+                    <td>志愿活动开始时间。晚于当前时间。</td>
+                </tr>
+                <tr>
+                    <td>member</td>
+                    <td>int</td>
+                    <td>限制报名人数。</td>
+                </tr>
+            </tbody>
+        </table>
+- 返回参数：
+    - 示例
+        ```json
         {
-            "type": 1,
+            "errCode": 0,
+            "errMsg": "",
+            "id": 12
+        }
+        ```
+    - 说明
+        <table>
+            <thead>
+                <tr>
+                    <th>参数名称</th>
+                    <th>参数类型</th>
+                    <th>参数说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>errCode</td>
+                    <td>int</td>
+                    <td>错误码。0代表成功，非0代表意外错误。</td>
+                </tr>
+                <tr>
+                    <td>errMsg</td>
+                    <td>string</td>
+                    <td>错误信息。</td>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>int</td>
+                    <td>发起活动的id。仅当成功时存在。</td>
+                </tr>
+            </tbody>
+        </table>
+### 管理员发起福利活动
+- 权限级别：管理员
+- 路由：`/api/manager/publish/award`
+- 请求方法：`POST`
+- 请求参数：
+    - 示例：
+        ```json
+        {
             "title": "Ticket",
             "details": "None.",
             "bookTime": "2018-09-25 19:00:00",
@@ -36,11 +107,6 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>type</td>
-                    <td>int</td>
-                    <td>活动类型。0代表志愿者活动，1代表福利活动。</td>
-                </tr>
-                <tr>
                     <td>title</td>
                     <td>string</td>
                     <td>活动标题。</td>
@@ -51,19 +117,9 @@
                     <td>活动详情。</td>
                 </tr>
                 <tr>
-                    <td>actionTime</td>
-                    <td>string</td>
-                    <td>志愿活动开始时间。晚于当前时间。</td>
-                </tr>
-                <tr>
                     <td>bookTime</td>
                     <td>string</td>
                     <td>福利领取时间。晚于当前时间。</td>
-                </tr>
-                <tr>
-                    <td>member</td>
-                    <td>int</td>
-                    <td>限制报名人数。</td>
                 </tr>
                 <tr>
                     <td>award</td>
@@ -115,7 +171,7 @@
         </table>
 ### 浏览活动情况
 - 权限级别：用户
-- 接口地址：`*.php`
+- 路由：`/api/user/query/activity`
 - 请求方法：`POST`
 - 请求参数：
     - 示例
@@ -281,7 +337,7 @@
         </table>
 ### 管理员查询各部门报名人数
 - 权限级别：管理员
-- 接口地址：`*.php`
+- 路由：`/api/manager/query/department`
 - 请求方法：`POST`
 - 请求参数：
     - 示例
@@ -352,7 +408,7 @@
         </table>
 ### 管理员浏览报名用户信息
 - 权限级别：管理员
-- 接口地址：`*.php`
+- 路由：`/api/manager/query/userinfo`
 - 请求方法：`POST`
 - 请求参数：
     - 示例
@@ -461,7 +517,7 @@
         </table>
 ### 管理员下载.csv文件
 - 权限级别：管理员
-- 接口地址：`*.php`
+- 路由：`/api/manager/download`
 - 请求方法：`POST`
 - 请求参数：
     - 示例
@@ -489,7 +545,7 @@
         </table>
 ### 用户报名
 - 权限级别：用户
-- 接口地址：`*.php`
+- 路由：`/api/user/register`
 - 请求方法：`POST`
 - 请求参数：
     - 示例
@@ -552,7 +608,7 @@
         </table>
 ### 活动发起人修改活动（类型、标题不予修改，活动开始后活动不予修改）
 - 权限级别：活动发起人
-- 接口地址：`*.php`
+- 路由：`/api/publisher/modify`
 - 请求方法：`POST`
 - 请求参数：
     - 示例
@@ -653,7 +709,7 @@
         </table>
 ### 活动发起人删除活动
 - 权限级别：活动发起人
-- 接口地址：`*.php`
+- 路由：`/api/publisher/delete`
 - 请求方法：`POST`
 - 请求参数：
     - 示例
@@ -711,7 +767,7 @@
         </table>
 ### 活动发起人随机补齐人数（只适用于志愿者活动）
 - 权限级别：活动发起人
-- 接口地址：`*.php`
+- 路由：`/api/publisher/roll`
 - 请求方法：`POST`
 - 请求参数：
     - 示例
