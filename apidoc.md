@@ -9,7 +9,7 @@
         {
             "title": "Some Fun",
             "details": "Help the lazy dog jump over the quick brown fox.",
-            "actionTime": "2018-09-16 00:00:00",
+            "action_time": "2018-09-16 00:00:00",
             "member": 80
         }
         ```
@@ -34,7 +34,7 @@
                     <td>活动详情。</td>
                 </tr>
                 <tr>
-                    <td>actionTime</td>
+                    <td>action_time</td>
                     <td>string</td>
                     <td>志愿活动开始时间。晚于当前时间。</td>
                 </tr>
@@ -49,8 +49,8 @@
     - 示例
         ```json
         {
-            "errCode": 0,
-            "errMsg": "",
+            "err_code": 0,
+            "err_msg": "",
             "id": 12
         }
         ```
@@ -65,12 +65,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>errCode</td>
+                    <td>err_code</td>
                     <td>int</td>
                     <td>错误码。0代表成功，非0代表意外错误。</td>
                 </tr>
                 <tr>
-                    <td>errMsg</td>
+                    <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
                 </tr>
@@ -91,9 +91,9 @@
         {
             "title": "Ticket",
             "details": "None.",
-            "bookTime": "2018-09-25 19:00:00",
+            "book_time": "2018-09-25 19:00:00",
             "award": 40,
-            "memberList": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+            "member_list": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
         }
         ```
     - 说明
@@ -117,7 +117,7 @@
                     <td>活动详情。</td>
                 </tr>
                 <tr>
-                    <td>bookTime</td>
+                    <td>book_time</td>
                     <td>string</td>
                     <td>福利领取时间。晚于当前时间。</td>
                 </tr>
@@ -127,7 +127,7 @@
                     <td>奖品数。</td>
                 </tr>
                 <tr>
-                    <td>memberList</td>
+                    <td>member_list</td>
                     <td>array</td>
                     <td>限制的各个部门的领奖人数。</td>
                 </tr>
@@ -137,8 +137,8 @@
     - 示例
         ```json
         {
-            "errCode": 0,
-            "errMsg": "",
+            "err_code": 0,
+            "err_msg": "",
             "id": 12
         }
         ```
@@ -153,12 +153,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>errCode</td>
+                    <td>err_code</td>
                     <td>int</td>
                     <td>错误码。0代表成功，非0代表意外错误。</td>
                 </tr>
                 <tr>
-                    <td>errMsg</td>
+                    <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
                 </tr>
@@ -178,7 +178,7 @@
         ```json
         {
             "type": 0,
-            "startId": 10,
+            "start_id": 10,
             "number": 3
         }
         ```
@@ -198,9 +198,9 @@
                     <td>查询类型。为0时表示查找所有活动，为1时表示查找自己未报名的活动，为2时表示查找自己已报名的活动，为3时表示查找自己发起的活动。</td>
                 </tr>
                 <tr>
-                    <td>startId</td>
+                    <td>start_id</td>
                     <td>int</td>
-                    <td>查询活动id的起点。查找id<=startId的活动，直到查找到number个活动或到达末尾为止。</td>
+                    <td>查询活动id的起点。查找id<=start_id的活动，直到查找到number个活动或到达末尾为止。</td>
                 </tr>
                 <tr>
                     <td>number</td>
@@ -213,41 +213,41 @@
     - 示例
         ```json
         {
-            "errCode": 0,
-            "errMsg": "",
+            "err_code": 0,
+            "err_msg": "",
             "data": {
-                "isEnd": false,
+                "is_end": false,
                 "activities": [
                     {
                         "id": 9,
-                        "isPublisher": true,
+                        "is_publisher": true,
                         "type": 0,
                         "title": "Some Fun",
                         "details": "Help the lazy dog jump over the quick brown fox.",
-                        "actionTime": "2018-09-26 00:00:00",
+                        "action_time": "2018-09-26 00:00:00",
                         "member": 80,
-                        "currentMember": 23
+                        "current_member": 23
                     },
                     {
                         "id": 8,
-                        "isPublisher": true,
+                        "is_publisher": true,
                         "type": 1,
                         "title": "Ticket",
                         "details": "None.",
-                        "bookTime": "2018-09-25 19:00:00",
+                        "book_time": "2018-09-25 19:00:00",
                         "award": 40,
-                        "currentMember": 37,
-                        "isDepartmentFull": false
+                        "current_member": 37,
+                        "is_department_full": false
                     },
                     {
                         "id": 6,
-                        "isPublisher": false,
+                        "is_publisher": false,
                         "type": 0,
                         "title": "Some Fun",
                         "details": "Help the lazy dog jump over the quick brown fox.",
-                        "actionTime": "2018-09-16 00:00:00",
+                        "action_time": "2018-09-16 00:00:00",
                         "member": 80,
-                        "currentMember": 80
+                        "current_member": 80
                     }
                 ]
             }
@@ -264,17 +264,17 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>errCode</td>
+                    <td>err_code</td>
                     <td>int</td>
                     <td>错误码。0代表成功，非0代表意外错误。</td>
                 </tr>
                 <tr>
-                    <td>errMsg</td>
+                    <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
                 </tr>
                 <tr>
-                    <td>isEnd</td>
+                    <td>is_end</td>
                     <td>bool</td>
                     <td>查询是否达到末尾。若为true，表示不能继续查询。</td>
                 </tr>
@@ -284,7 +284,7 @@
                     <td>活动的id。</td>
                 </tr>
                 <tr>
-                    <td>isPublisher</td>
+                    <td>is_publisher</td>
                     <td>bool</td>
                     <td>是否为该活动发起人。</td>
                 </tr>
@@ -304,12 +304,12 @@
                     <td>活动详情。</td>
                 </tr>
                 <tr>
-                    <td>actionTime</td>
+                    <td>action_time</td>
                     <td>string</td>
                     <td>志愿活动开始时间。</td>
                 </tr>
                 <tr>
-                    <td>bookTime</td>
+                    <td>book_time</td>
                     <td>string</td>
                     <td>福利领取时间。</td>
                 </tr>
@@ -324,12 +324,12 @@
                     <td>奖品数。</td>
                 </tr>
                 <tr>
-                    <td>currentMember</td>
+                    <td>current_member</td>
                     <td>int</td>
                     <td>已参与人数。</td>
                 </tr>
                 <tr>
-                    <td>isDepartmentFull</td>
+                    <td>is_department_full</td>
                     <td>bool</td>
                     <td>所在部门名额是否已满。</td>
                 </tr>
@@ -337,41 +337,17 @@
         </table>
 ### 管理员查询各部门报名人数
 - 权限级别：管理员
-- 路由：`/api/manager/query/department`
+- 路由：`/api/manager/query/{activity_id}/department`
 - 请求方法：`POST`
-- 请求参数：
-    - 示例
-        ```json
-        {
-            "id": 10
-        }
-        ```
-    - 说明
-        <table>
-            <thead>
-                <tr>
-                    <th>参数名称</th>
-                    <th>参数类型</th>
-                    <th>参数说明</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>id</td>
-                    <td>int</td>
-                    <td>活动的id。</td>
-                </tr>
-            </tbody>
-        </table>
 - 返回参数：
     - 示例
         ```json
         {
-            "errCode": 0,
-            "errMsg": "",
+            "err_code": 0,
+            "err_msg": "",
             "data": {
-                "memberList": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
-                "currentMemberList": [2, 6, 10, 7, 12, 8, 4, 3, 9, 10]
+                "member_list": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+                "current_member_list": [2, 6, 10, 7, 12, 8, 4, 3, 9, 10]
             }
         }
         ```
@@ -385,22 +361,22 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>errCode</td>
+                    <td>err_code</td>
                     <td>int</td>
                     <td>错误码。0代表成功，非0代表意外错误。</td>
                 </tr>
                 <tr>
-                    <td>errMsg</td>
+                    <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
                 </tr>
                 <tr>
-                    <td>memberList</td>
+                    <td>member_list</td>
                     <td>array</td>
                     <td>限制的各个部门的领奖人数。仅当活动type为1时存在。</td>
                 </tr>
                 <tr>
-                    <td>currentMemberList</td>
+                    <td>current_member_list</td>
                     <td>array</td>
                     <td>各个部门已报名、领奖人数。</td>
                 </tr>
@@ -408,14 +384,13 @@
         </table>
 ### 管理员浏览报名用户信息
 - 权限级别：管理员
-- 路由：`/api/manager/query/userinfo`
+- 路由：`/api/manager/query/{activity_id}/userinfo`
 - 请求方法：`POST`
 - 请求参数：
     - 示例
         ```json
         {
-            "id": 10,
-            "startOrd": 21,
+            "start_ord": 21,
             "number": 3
         }
         ```
@@ -430,12 +405,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>id</td>
-                    <td>int</td>
-                    <td>活动的id。</td>
-                </tr>
-                <tr>
-                    <td>startOrd</td>
+                    <td>start_ord</td>
                     <td>int</td>
                     <td>查询报名用户的起点。排序为按报名时间从先到后的顺序。查询机制类似于“浏览活动情况”。</td>
                 </tr>
@@ -450,23 +420,23 @@
     - 示例
         ```json
         {
-            "errCode": 0,
-            "errMsg": "",
+            "err_code": 0,
+            "err_msg": "",
             "data": {
-                "isEnd": true,
+                "is_end": true,
                 "users": [
                     {
-                        "userName": "张三",
+                        "name": "张三",
                         "department": 1,
                         "tele": "13110111011"
                     },
                     {
-                        "userName": "李四",
+                        "name": "李四",
                         "department": 7,
                         "tele": "13111111011"
                     },
                     {
-                        "userName": "王五",
+                        "name": "王五",
                         "department": 0,
                         "tele": "13112111011"
                     }
@@ -484,22 +454,22 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>errCode</td>
+                    <td>err_code</td>
                     <td>int</td>
                     <td>错误码。0代表成功，非0代表意外错误。</td>
                 </tr>
                 <tr>
-                    <td>errMsg</td>
+                    <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
                 </tr>
                 <tr>
-                    <td>isEnd</td>
+                    <td>is_end</td>
                     <td>bool</td>
                     <td>是否达到末尾。若为true，表示不能继续查询。</td>
                 </tr>
                 <tr>
-                    <td>userName</td>
+                    <td>name</td>
                     <td>string</td>
                     <td>报名用户姓名。</td>
                 </tr>
@@ -517,66 +487,18 @@
         </table>
 ### 管理员下载.csv文件
 - 权限级别：管理员
-- 路由：`/api/manager/download`
+- 路由：`/api/manager/download/{activity_id}`
 - 请求方法：`POST`
-- 请求参数：
-    - 示例
-        ```json
-        {
-            "id": 10
-        }
-        ```
-    - 说明
-        <table>
-            <thead>
-                <tr>
-                    <th>参数名称</th>
-                    <th>参数类型</th>
-                    <th>参数说明</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>id</td>
-                    <td>int</td>
-                    <td>活动的id。</td>
-                </tr>
-            </tbody>
-        </table>
 ### 用户报名
 - 权限级别：用户
-- 路由：`/api/user/register`
+- 路由：`/api/user/register/{activity_id}`
 - 请求方法：`POST`
-- 请求参数：
-    - 示例
-        ```json
-        {
-            "id": 14
-        }
-        ```
-    - 说明
-        <table>
-            <thead>
-                <tr>
-                    <th>参数名称</th>
-                    <th>参数类型</th>
-                    <th>参数说明</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>id</td>
-                    <td>int</td>
-                    <td>活动的id。</td>
-                </tr>
-            </tbody>
-        </table>
 - 返回参数：
     - 示例
         ```json
         {
-            "errCode": 0,
-            "errMsg": "",
+            "err_code": 0,
+            "err_msg": "",
             "status": 0
         }
         ```
@@ -590,12 +512,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>errCode</td>
+                    <td>err_code</td>
                     <td>int</td>
                     <td>错误码。0代表成功，非0代表意外错误。</td>
                 </tr>
                 <tr>
-                    <td>errMsg</td>
+                    <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
                 </tr>
@@ -606,28 +528,17 @@
                 </tr>
             </tbody>
         </table>
-### 活动发起人修改活动（类型、标题不予修改，活动开始后活动不予修改）
+### 活动发起人修改志愿者活动（类型、标题不予修改，活动开始后活动不予修改）
 - 权限级别：活动发起人
-- 路由：`/api/publisher/modify`
+- 路由：`/api/publisher/modify/volunteer/{activity_id}`
 - 请求方法：`POST`
 - 请求参数：
     - 示例
         ```json
-        // 志愿者活动
         {
-            "id": 10,
             "details": "Help the lazy dog jump over the quick brown fox.",
-            "actionTime": "2018-09-16 00:00:00",
+            "action_time": "2018-09-16 00:00:00",
             "member": 80
-        }
-
-        // 福利活动
-        {
-            "id": 20,
-            "details": "None.",
-            "bookTime": "2018-09-25 19:00:00",
-            "award": 40,
-            "memberList": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
         }
         ```
     - 说明
@@ -641,29 +552,85 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>id</td>
-                    <td>int</td>
-                    <td>活动的id。</td>
+                    <td>details</td>
+                    <td>string</td>
+                    <td>活动详情。</td>
                 </tr>
+                <tr>
+                    <td>action_time</td>
+                    <td>string</td>
+                    <td>志愿活动开始时间。晚于当前时间。</td>
+                </tr>
+                <tr>
+                    <td>member</td>
+                    <td>int</td>
+                    <td>限制报名人数。为避免逻辑上踢掉已报名的人，应不小于之前的数值。</td>
+                </tr>
+            </tbody>
+        </table>
+- 返回参数：
+    - 示例
+        ```json
+        {
+            "err_code": 0,
+            "err_msg": ""
+        }
+        ```
+    - 说明
+        <table>
+            <thead>
+                <tr>
+                    <th>参数名称</th>
+                    <th>参数类型</th>
+                    <th>参数说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>err_code</td>
+                    <td>int</td>
+                    <td>错误码。0代表成功，非0代表意外错误。</td>
+                </tr>
+                <tr>
+                    <td>err_msg</td>
+                    <td>string</td>
+                    <td>错误信息。</td>
+                </tr>
+            </tbody>
+        </table>
+### 活动发起人修改福利活动（类型、标题不予修改，活动开始后活动不予修改）
+- 权限级别：活动发起人
+- 路由：`/api/publisher/modify/award/{activity_id}`
+- 请求方法：`POST`
+- 请求参数：
+    - 示例
+        ```json
+        {
+            "details": "None.",
+            "book_time": "2018-09-25 19:00:00",
+            "award": 40,
+            "member_list": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+        }
+        ```
+    - 说明
+        <table>
+            <thead>
+                <tr>
+                    <th>参数名称</th>
+                    <th>参数类型</th>
+                    <th>参数说明</th>
+                </tr>
+            </thead>
+            <tbody>
                 <tr>
                     <td>details</td>
                     <td>string</td>
                     <td>活动详情。</td>
                 </tr>
                 <tr>
-                    <td>actionTime</td>
-                    <td>string</td>
-                    <td>志愿活动开始时间。晚于当前时间。</td>
-                </tr>
-                <tr>
-                    <td>bookTime</td>
+                    <td>book_time</td>
                     <td>string</td>
                     <td>福利领取时间。晚于当前时间。</td>
-                </tr>
-                <tr>
-                    <td>member</td>
-                    <td>int</td>
-                    <td>限制报名人数。为避免逻辑上踢掉已报名的人，应不小于之前的数值。</td>
                 </tr>
                 <tr>
                     <td>award</td>
@@ -671,7 +638,7 @@
                     <td>奖品数。</td>
                 </tr>
                 <tr>
-                    <td>memberList</td>
+                    <td>member_list</td>
                     <td>array</td>
                     <td>限制的各个部门的领奖人数。</td>
                 </tr>
@@ -681,8 +648,8 @@
     - 示例
         ```json
         {
-            "errCode": 0,
-            "errMsg": ""
+            "err_code": 0,
+            "err_msg": ""
         }
         ```
     - 说明
@@ -696,12 +663,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>errCode</td>
+                    <td>err_code</td>
                     <td>int</td>
                     <td>错误码。0代表成功，非0代表意外错误。</td>
                 </tr>
                 <tr>
-                    <td>errMsg</td>
+                    <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
                 </tr>
@@ -709,38 +676,14 @@
         </table>
 ### 活动发起人删除活动
 - 权限级别：活动发起人
-- 路由：`/api/publisher/delete`
+- 路由：`/api/publisher/delete/{activity_id}`
 - 请求方法：`POST`
-- 请求参数：
-    - 示例
-        ```json
-        {
-            "id": 10
-        }
-        ```
-    - 说明
-        <table>
-            <thead>
-                <tr>
-                    <th>参数名称</th>
-                    <th>参数类型</th>
-                    <th>参数说明</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>id</td>
-                    <td>int</td>
-                    <td>活动的id。</td>
-                </tr>
-            </tbody>
-        </table>
 - 返回参数：
     - 示例
         ```json
         {
-            "errCode": 0,
-            "errMsg": ""
+            "err_code": 0,
+            "err_msg": ""
         }
         ```
     - 说明
@@ -754,12 +697,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>errCode</td>
+                    <td>err_code</td>
                     <td>int</td>
                     <td>错误码。0代表成功，非0代表意外错误。</td>
                 </tr>
                 <tr>
-                    <td>errMsg</td>
+                    <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
                 </tr>
@@ -767,38 +710,14 @@
         </table>
 ### 活动发起人随机补齐人数（只适用于志愿者活动）
 - 权限级别：活动发起人
-- 路由：`/api/publisher/roll`
+- 路由：`/api/publisher/roll/{activity_id}`
 - 请求方法：`POST`
-- 请求参数：
-    - 示例
-        ```json
-        {
-            "id": 10
-        }
-        ```
-    - 说明
-        <table>
-            <thead>
-                <tr>
-                    <th>参数名称</th>
-                    <th>参数类型</th>
-                    <th>参数说明</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>id</td>
-                    <td>int</td>
-                    <td>活动的id。</td>
-                </tr>
-            </tbody>
-        </table>
 - 返回参数：
     - 示例
         ```json
         {
-            "errCode": 0,
-            "errMsg": "",
+            "err_code": 0,
+            "err_msg": "",
             "status": 0
         }
         ```
@@ -813,12 +732,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>errCode</td>
+                    <td>err_code</td>
                     <td>int</td>
                     <td>错误码。0代表成功，非0代表意外错误。</td>
                 </tr>
                 <tr>
-                    <td>errMsg</td>
+                    <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
                 </tr>
