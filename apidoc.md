@@ -9,6 +9,7 @@
             "err_code": 0,
             "err_msg": "",
             "data": {
+                "student_id": "201720182019",
                 "name": "张三",
                 "is_manager": false
             }
@@ -33,6 +34,11 @@
                     <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
+                </tr>
+                <tr>
+                    <td>student_id</td>
+                    <td>string</td>
+                    <td>学号。</td>
                 </tr>
                 <tr>
                     <td>name</td>
@@ -120,6 +126,39 @@
                     <td>is_manager</td>
                     <td>bool</td>
                     <td>是否为管理员。</td>
+                </tr>
+            </tbody>
+        </table>
+### 退出登录
+- 路由：`/api/signout`
+- 请求方法：`POST`
+- 返回参数：
+    - 示例
+        ```json
+        {
+            "err_code": 0,
+            "err_msg": ""
+        }
+        ```
+    - 说明
+        <table>
+            <thead>
+                <tr>
+                    <th>参数名称</th>
+                    <th>参数类型</th>
+                    <th>参数说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>err_code</td>
+                    <td>int</td>
+                    <td>错误码。0代表成功，非0代表意外错误。</td>
+                </tr>
+                <tr>
+                    <td>err_msg</td>
+                    <td>string</td>
+                    <td>错误信息。</td>
                 </tr>
             </tbody>
         </table>
@@ -550,16 +589,19 @@
                 "is_end": true,
                 "users": [
                     {
+                        "student_id": "201720182019",
                         "name": "张三",
                         "department": 1,
                         "tele": "13110111011"
                     },
                     {
+                        "student_id": "201720182020",
                         "name": "李四",
                         "department": 7,
                         "tele": "13111111011"
                     },
                     {
+                        "student_id": "201720182021",
                         "name": "王五",
                         "department": 0,
                         "tele": "13112111011"
@@ -591,6 +633,11 @@
                     <td>is_end</td>
                     <td>bool</td>
                     <td>是否达到末尾。若为true，表示不能继续查询。</td>
+                </tr>
+                <tr>
+                    <td>student_id</td>
+                    <td>string</td>
+                    <td>学号。</td>
                 </tr>
                 <tr>
                     <td>name</td>
