@@ -1,4 +1,128 @@
 # 前后端对接文档
+### 打开页面时身份验证
+- 路由：`/api/init`
+- 请求方法：`POST`
+- 返回参数：
+    - 示例
+        ```json
+        {
+            "err_code": 0,
+            "err_msg": "",
+            "data": {
+                "name": "张三",
+                "is_manager": false
+            }
+        }
+        ```
+    - 说明
+        <table>
+            <thead>
+                <tr>
+                    <th>参数名称</th>
+                    <th>参数类型</th>
+                    <th>参数说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>err_code</td>
+                    <td>int</td>
+                    <td>错误码。0代表成功，非0代表意外错误。</td>
+                </tr>
+                <tr>
+                    <td>err_msg</td>
+                    <td>string</td>
+                    <td>错误信息。</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>string</td>
+                    <td>姓名。</td>
+                </tr>
+                <tr>
+                    <td>is_manager</td>
+                    <td>bool</td>
+                    <td>是否为管理员。</td>
+                </tr>
+            </tbody>
+        </table>
+### 登录认证
+- 路由：`/api/login`
+- 请求方法：`POST`
+- 请求参数：
+    - 示例：
+        ```json
+        {
+            "student_id": "201720182019",
+            "password": "***********"
+        }
+        ```
+    - 说明
+        <table>
+            <thead>
+                <tr>
+                    <th>参数名称</th>
+                    <th>参数类型</th>
+                    <th>参数说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>student_id</td>
+                    <td>string</td>
+                    <td>学号。</td>
+                </tr>
+                <tr>
+                    <td>password</td>
+                    <td>string</td>
+                    <td>密码。</td>
+                </tr>
+            </tbody>
+        </table>
+- 返回参数：
+    - 示例
+        ```json
+        {
+            "err_code": 0,
+            "err_msg": "",
+            "data": {
+                "name": "张三",
+                "is_manager": false
+            }
+        }
+        ```
+    - 说明
+        <table>
+            <thead>
+                <tr>
+                    <th>参数名称</th>
+                    <th>参数类型</th>
+                    <th>参数说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>err_code</td>
+                    <td>int</td>
+                    <td>错误码。0代表成功，非0代表意外错误。</td>
+                </tr>
+                <tr>
+                    <td>err_msg</td>
+                    <td>string</td>
+                    <td>错误信息。</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>string</td>
+                    <td>姓名。</td>
+                </tr>
+                <tr>
+                    <td>is_manager</td>
+                    <td>bool</td>
+                    <td>是否为管理员。</td>
+                </tr>
+            </tbody>
+        </table>
 ### 管理员发起志愿者活动
 - 权限级别：管理员
 - 路由：`/api/manager/publish/volunteer`
