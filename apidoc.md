@@ -699,8 +699,7 @@
         ```json
         {
             "err_code": 0,
-            "err_msg": "",
-            "status": 0
+            "err_msg": ""
         }
         ```
         <table>
@@ -721,11 +720,6 @@
                     <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
-                </tr>
-                <tr>
-                    <td>status</td>
-                    <td>int</td>
-                    <td>参与状态。为0时表示参与成功，为1时表示参与总人数已上限，为2时表示所在部门参与人数已上限。</td>
                 </tr>
             </tbody>
         </table>
@@ -918,8 +912,7 @@
         ```json
         {
             "err_code": 0,
-            "err_msg": "",
-            "status": 0
+            "err_msg": ""
         }
         ```
     - 说明
@@ -941,11 +934,6 @@
                     <td>err_msg</td>
                     <td>string</td>
                     <td>错误信息。</td>
-                </tr>
-                <tr>
-                    <td>status</td>
-                    <td>int</td>
-                    <td>补齐状态。为0时表示补齐成功，为1时表示人数已满。</td>
                 </tr>
             </tbody>
         </table>
