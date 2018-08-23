@@ -406,6 +406,7 @@
                     {
                         "id": 9,
                         "is_publisher": true,
+                        "registered": false,
                         "type": 0,
                         "title": "Some Fun",
                         "details": "Help the lazy dog jump over the quick brown fox.",
@@ -416,6 +417,7 @@
                     {
                         "id": 8,
                         "is_publisher": true,
+                        "registered": true,
                         "type": 1,
                         "title": "Ticket",
                         "details": "None.",
@@ -427,6 +429,7 @@
                     {
                         "id": 6,
                         "is_publisher": false,
+                        "registered": true,
                         "type": 0,
                         "title": "Some Fun",
                         "details": "Help the lazy dog jump over the quick brown fox.",
@@ -472,6 +475,11 @@
                     <td>is_publisher</td>
                     <td>bool</td>
                     <td>是否为该活动发起人。</td>
+                </tr>
+                <tr>
+                    <td>registered</td>
+                    <td>bool</td>
+                    <td>是否已报名该活动。</td>
                 </tr>
                 <tr>
                     <td>type</td>
