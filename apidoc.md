@@ -385,7 +385,7 @@
                 <tr>
                     <td>start_id</td>
                     <td>int</td>
-                    <td>查询活动id的起点。当start_id>=0时查找id<=start_id的活动，直到查找到number个活动或到达末尾为止；当start_id<0时，从当前id值最大的活动开始查找，直到查找到number个活动或到达末尾为止。</td>
+                    <td>查询活动id的起点。当start_id>0时查找id<=start_id的活动，直到查找到number个活动或到达末尾为止；当start_id=0时，从当前id值最大的活动开始查找，直到查找到number个活动或到达末尾为止。</td>
                 </tr>
                 <tr>
                     <td>number</td>
