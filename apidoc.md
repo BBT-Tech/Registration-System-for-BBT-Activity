@@ -1,20 +1,73 @@
 # 前后端对接文档
 ### 总体说明
 - 部门代码映射表：
-    ```json
-    {
-        "0": "编辑部",
-        "1": "综合管理部",
-        "2": "综合新闻部",
-        "3": "外联部",
-        "4": "策划推广部",
-        "5": "节目部",
-        "6": "人力资源部",
-        "7": "技术部",
-        "8": "视频部",
-        "9": "视觉设计部"
-    }
-    ```
+    <table>
+        <thead>
+            <tr>
+                <th>部门代码</th>
+                <th>部门名称</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>0</td><td>编辑部</td></tr>
+            <tr><td>1</td><td>综合管理部</td></tr>
+            <tr><td>2</td><td>综合新闻部</td></tr>
+            <tr><td>3</td><td>外联部</td></tr>
+            <tr><td>4</td><td>策划推广部</td></tr>
+            <tr><td>5</td><td>节目部</td></tr>
+            <tr><td>6</td><td>人力资源部</td></tr>
+            <tr><td>7</td><td>技术部</td></tr>
+            <tr><td>8</td><td>视频部</td></tr>
+            <tr><td>9</td><td>视觉设计部</td></tr>
+        </tbody>
+    </table>
+- 活动字段格式要求：
+    <table>
+        <thead>
+            <tr>
+                <th>字段名</th>
+                <th>字段说明</th>
+                <th>格式</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>title</td>
+                <td>活动标题。</td>
+                <td>0<字符数<=25。</td>
+            </tr>
+            <tr>
+                <td>details</td>
+                <td>活动详情。</td>
+                <td>0<字符数<=100。</td>
+            </tr>
+            <tr>
+                <td>action_time</td>
+                <td>志愿活动开始时间。</td>
+                <td>格式为：YYYY-MM-DD hh:mm:ss。</td>
+            </tr>
+            <tr>
+                <td>book_time</td>
+                <td>福利领取时间。</td>
+                <td>格式为：YYYY-MM-DD hh:mm:ss。</td>
+            </tr>
+            <tr>
+                <td>member</td>
+                <td>限制报名人数。</td>
+                <td>正整数。</td>
+            </tr>
+            <tr>
+                <td>award</td>
+                <td>奖品数。</td>
+                <td>正整数。</td>
+            </tr>
+            <tr>
+                <td>member_list</td>
+                <td>限制的各个部门的领奖人数。</td>
+                <td>数组。元素均为正整数。元素总和不小于award。</td>
+            </tr>
+        </tbody>
+    </table>
 ### 打开页面时身份验证
 - 路由：`/api/init`
 - 请求方法：`POST`
@@ -354,6 +407,39 @@
                 </tr>
             </tbody>
         </table>
+### 活动发布者上传或编辑活动照片
+- 权限级别：活动发布者
+- 额外说明：在页面逻辑上，上传图片和活动信息本来是在同一个请求中的，但考虑到目前所有前端传到后台的数据都是`application/json`格式的，json难以存放二进制数据，所以将上传图片的接口分离，待活动的文本信息上传成功后，再进行图片的上传。上传成功后，将图片存放在根目录下的`activityimg`文件夹中，文件名为`{activity_id}.*`。所以应在活动的数据表中增加一个图片目录的字段，该字段为空或者字段非空且文件不存在时，表示使用设计提供的默认图片。在验证时，注意对发布者身份的验证，注意限制图片格式、大小的验证（只允许大小为200KB以下的`image/png`、`image/jpeg`）。活动开始后不允许编辑。
+- 返回参数
+    - 示例
+        ```json
+        {
+            "err_code": 0,
+            "err_msg": ""
+        }
+        ```
+    - 说明
+        <table>
+            <thead>
+                <tr>
+                    <th>参数名称</th>
+                    <th>参数类型</th>
+                    <th>参数说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>err_code</td>
+                    <td>int</td>
+                    <td>错误码。0代表成功，非0代表意外错误。</td>
+                </tr>
+                <tr>
+                    <td>err_msg</td>
+                    <td>string</td>
+                    <td>错误信息。</td>
+                </tr>
+            </tbody>
+        </table>
 ### 浏览活动情况
 - 权限级别：用户
 - 路由：`/api/user/query/activity`
@@ -412,7 +498,8 @@
                         "details": "Help the lazy dog jump over the quick brown fox.",
                         "action_time": "2018-09-26 00:00:00",
                         "member": 80,
-                        "current_member": 23
+                        "current_member": 23,
+                        "image": "activityimg/9.png"
                     },
                     {
                         "id": 8,
@@ -424,7 +511,8 @@
                         "book_time": "2018-09-25 19:00:00",
                         "award": 40,
                         "current_member": 37,
-                        "is_department_full": false
+                        "is_department_full": false,
+                        "image": ""
                     },
                     {
                         "id": 6,
@@ -435,7 +523,8 @@
                         "details": "Help the lazy dog jump over the quick brown fox.",
                         "action_time": "2018-09-16 00:00:00",
                         "member": 80,
-                        "current_member": 80
+                        "current_member": 80,
+                        "image": "activityimg/6.jpg"
                     }
                 ]
             }
@@ -526,6 +615,11 @@
                     <td>bool</td>
                     <td>所在部门名额是否已满。</td>
                 </tr>
+                <tr>
+                    <td>image</td>
+                    <td>string</td>
+                    <td>图片目录。为空时表示未指定图片或图片不存在。</td>
+                </tr>
             </tbody>
         </table>
 ### 管理员查询各部门报名人数
@@ -583,8 +677,7 @@
     - 示例
         ```json
         {
-            "start_ord": 21,
-            "number": 3
+            "department": 2
         }
         ```
     - 说明
@@ -598,14 +691,9 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>start_ord</td>
+                    <td>department</td>
                     <td>int</td>
-                    <td>查询报名用户的起点。排序为按报名时间从先到后的顺序。查询机制类似于“浏览活动情况”。</td>
-                </tr>
-                <tr>
-                    <td>number</td>
-                    <td>int</td>
-                    <td>查询活动的数量。</td>
+                    <td>报名用户所在部门对应序号。</td>
                 </tr>
             </tbody>
         </table>
@@ -616,24 +704,20 @@
             "err_code": 0,
             "err_msg": "",
             "data": {
-                "is_end": true,
                 "users": [
                     {
                         "student_id": "201720182019",
                         "name": "张三",
-                        "department": "综合管理部",
                         "tele": "13110111011"
                     },
                     {
                         "student_id": "201720182020",
                         "name": "李四",
-                        "department": "策划推广部",
                         "tele": "13111111011"
                     },
                     {
                         "student_id": "201720182021",
                         "name": "王五",
-                        "department": "视觉设计部",
                         "tele": "13112111011"
                     }
                 ]
@@ -660,11 +744,6 @@
                     <td>错误信息。</td>
                 </tr>
                 <tr>
-                    <td>is_end</td>
-                    <td>bool</td>
-                    <td>是否达到末尾。若为true，表示不能继续查询。</td>
-                </tr>
-                <tr>
                     <td>student_id</td>
                     <td>string</td>
                     <td>学号。</td>
@@ -673,11 +752,6 @@
                     <td>name</td>
                     <td>string</td>
                     <td>报名用户姓名。</td>
-                </tr>
-                <tr>
-                    <td>department</td>
-                    <td>string</td>
-                    <td>报名用户所在部门。</td>
                 </tr>
                 <tr>
                     <td>tele</td>
@@ -693,6 +767,40 @@
 ### 用户报名
 - 权限级别：用户
 - 路由：`/api/user/register/{activity_id}`
+- 请求方法：`POST`
+- 返回参数：
+    - 示例
+        ```json
+        {
+            "err_code": 0,
+            "err_msg": ""
+        }
+        ```
+        <table>
+            <thead>
+                <tr>
+                    <th>参数名称</th>
+                    <th>参数类型</th>
+                    <th>参数说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>err_code</td>
+                    <td>int</td>
+                    <td>错误码。0代表成功，非0代表意外错误。</td>
+                </tr>
+                <tr>
+                    <td>err_msg</td>
+                    <td>string</td>
+                    <td>错误信息。</td>
+                </tr>
+            </tbody>
+        </table>
+### 用户取消报名
+- 权限级别：用户
+- 额外说明：志愿者活动的报名在开始时间之前，活动开始后禁止取消报名；福利活动的报名在开始时间之后，所以只有开始时间之后才允许取消。
+- 路由：`/api/user/unregister/{activity_id}`
 - 请求方法：`POST`
 - 返回参数：
     - 示例
@@ -872,40 +980,6 @@
 ### 活动发起人删除活动
 - 权限级别：活动发起人
 - 路由：`/api/publisher/delete/{activity_id}`
-- 请求方法：`POST`
-- 返回参数：
-    - 示例
-        ```json
-        {
-            "err_code": 0,
-            "err_msg": ""
-        }
-        ```
-    - 说明
-        <table>
-            <thead>
-                <tr>
-                    <th>参数名称</th>
-                    <th>参数类型</th>
-                    <th>参数说明</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>err_code</td>
-                    <td>int</td>
-                    <td>错误码。0代表成功，非0代表意外错误。</td>
-                </tr>
-                <tr>
-                    <td>err_msg</td>
-                    <td>string</td>
-                    <td>错误信息。</td>
-                </tr>
-            </tbody>
-        </table>
-### 活动发起人随机补齐人数（只适用于志愿者活动）
-- 权限级别：活动发起人
-- 路由：`/api/publisher/roll/{activity_id}`
 - 请求方法：`POST`
 - 返回参数：
     - 示例
