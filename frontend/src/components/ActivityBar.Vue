@@ -1,10 +1,29 @@
 <template>
   <div
     class="activity-bar"
-    v-bind:class="{'activity-error': isError}"
-    v-on:click="$root.$router.push('/activity/' + data.id)"
+    v-on:click="$emit('click')"
   >
-    <div v-if="data.type === 0">
+    <div class="img" v-on:load="console.log(5)"></div>
+    <div class="content">
+      <div class="title">{{ data.title }}</div>
+      <div class="info time">
+        <div v-if="data.type === 0">
+          {{ data.action_time.slice(0, -3) }}
+        </div>
+        <div v-else-if="data.type === 1">
+          {{ data.book_time.slice(0, -3) }}
+        </div>
+      </div>
+      <div class="info member">
+        <div v-if="data.type === 0">
+          {{ data.current_member }}/{{ data.member }}
+        </div>
+        <div v-else-if="data.type === 1">
+          {{ data.current_member }}/{{ data.award }}
+        </div>
+      </div>
+    </div>
+    <!--div v-if="data.type === 0">
       <div>志愿活动标题：{{ data.title }}</div>
       <div>详情：{{ data.details }}</div>
       <div>志愿开始时间：{{ data.action_time }}</div>
@@ -35,47 +54,66 @@
         class="activity-error-tip"
         v-else-if="data.is_department_full"
       >所在部门领取人数已满</div>
-    </div>
+    </div-->
   </div>
 </template>
 
 <script>
 export default {
   name: 'ActivityBar',
-  props: ['data'],
-  data () {
-    return {
-      usedData: this.data
-    }
-  },
-  computed: {
-    isError () {
-      var data = this.usedData
-      if (data.type === 0) {
-        return data.member === data.current_member ||
-          this.$root.compareDatetime(data.action_time) < 0
-      } else if (data.type === 1) {
-        return data.is_department_full ||
-          data.award === data.current_member ||
-          this.$root.compareDatetime(data.book_time) >= 0
-      }
-    }
-  }
+  props: ['data']
 }
 </script>
 
 <style scoped>
-.activity-bar {
-  border: 1px solid #000000;
-  background-color: #cccccc;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-bottom: 10px;
+.img {
+  background-image: url(../assets/default.jpg);
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 4.26667em;
 }
-.activity-error {
-  background-color: #ffcccc;
+.content {
+  position: absolute;
+  top: 0;
+  left: 4.46667em;
+  right: 0.2em;
+  bottom: 0;
 }
-.activity-error-tip {
-  color: #ff0000;
+.title {
+  padding: 0.4em 0 0.52em;
+  height: 1em;
+  line-height: 1em;
+  width: 100%;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: bold;
+  font-size: 0.5em;
+}
+.info {
+  margin-bottom: 0.26em;
+  height: 0.5em;
+  line-height: 0.5em;
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  position: relative;
+}
+.time {
+  background-image: url(../assets/clock-icon.png);
+}
+.member {
+  background-image: url(../assets/member-icon.png);
+}
+.info > div {
+  position: absolute;
+  left: 2.28571em;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.35em;
 }
 </style>

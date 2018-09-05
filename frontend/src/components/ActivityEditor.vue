@@ -104,7 +104,7 @@ export default {
     },
     isTimeValid () {
       return this.time !== '' &&
-        this.$root.compareDatetime(this.crn.time + ':00') > 0
+        this.$global.compareDatetime(this.crn.time + ':00') > 0
     },
     isNumberValid () {
       return this.crn.number > 0 &&
@@ -154,15 +154,15 @@ export default {
     }
   },
   beforeCreate () {
-    if (!this.$root.logined) {
+    if (!this.$global.logined) {
       this.$root.$router.replace('/login')
     }
-    if (!this.$root.isManager) {
+    if (!this.$global.isManager) {
       this.$root.$router.replace('/activity/' + this.$route.params.id)
     }
   },
   created () {
-    if (this.$root.logined && this.$root.isManager) {
+    if (this.$global.logined && this.$global.isManager) {
       this.checkActivity()
     }
   },
@@ -244,9 +244,9 @@ export default {
             let activity = data.activities[0]
             let timeAccess = false
             if (activity.type === 0) {
-              timeAccess = vm.$root.compareDatetime(activity.action_time) > 0
+              timeAccess = vm.$global.compareDatetime(activity.action_time) > 0
             } else if (activity.type === 1) {
-              timeAccess = vm.$root.compareDatetime(activity.book_time) > 0
+              timeAccess = vm.$global.compareDatetime(activity.book_time) > 0
             }
             if (!(timeAccess && activity.is_publisher)) {
               return Promise.reject('你没有修改权限')

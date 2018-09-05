@@ -67,7 +67,7 @@
             >编辑</button>
           </div>
         </div>
-        <div v-if="$root.isManager">
+        <div v-if="$global.isManager">
           <button v-on:click="getFile">导出参与用户信息</button>
           <br/>
           <span
@@ -131,17 +131,18 @@ export default {
     }
   },
   beforeCreate () {
-    if (!this.$root.logined) {
+    if (!this.$global.logined) {
       this.$root.$router.replace('/login')
     }
   },
   created () {
-    if (this.$root.logined) {
+    if (this.$global.logined) {
       this.getDetails()
     }
   },
   methods: {
     back () {
+      this.$emit('fade-out')
       this.$root.$router.push('/activity')
     },
     getDetails () {
@@ -165,17 +166,19 @@ export default {
           if (vm.isActivityExist) {
             vm.data = data.activities[0]
             if (vm.data.type === 0) {
-              vm.timeAccess = vm.$root.compareDatetime(vm.data.action_time) >= 0
+              vm.timeAccess = vm.$global.compareDatetime(vm.data.action_time) >= 0
             } else if (vm.data.type === 1) {
-              vm.timeAccess = vm.$root.compareDatetime(vm.data.book_time) < 0
+              vm.timeAccess = vm.$global.compareDatetime(vm.data.book_time) < 0
             }
           } else {
             vm.data = {}
           }
         }
+        vm.$emit('fade-in')
         vm.loading = false
       }).catch(data => {
         alert('404！该服务暂时不可用')
+        vm.$emit('fade-in')
         vm.loaing = false
       })
     },

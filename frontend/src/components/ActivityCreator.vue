@@ -103,7 +103,7 @@ export default {
     },
     isTimeValid () {
       return this.time !== '' &&
-        this.$root.compareDatetime(this.time + ':00') > 0
+        this.$global.compareDatetime(this.time + ':00') > 0
     },
     isNumberValid () {
       return this.number !== '' &&
@@ -140,10 +140,10 @@ export default {
     }
   },
   beforeCreate () {
-    if (!this.$root.logined) {
+    if (!this.$global.logined) {
       this.$root.$router.replace('/login')
     }
-    if (!this.$root.isManager) {
+    if (!this.$global.isManager) {
       this.$root.$router.replace('/activity')
     }
   },
