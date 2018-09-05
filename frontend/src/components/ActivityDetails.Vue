@@ -112,8 +112,10 @@ export default {
     'activity-department': ActivityDepartment,
     'activity-user': ActivityUser
   },
+  props: ['meta'],
   data () {
     return {
+      usedMeta: this.meta,
       queryTypes: [
         {name: '各部门情况', type: 1},
         {name: '参与人信息', type: 2}
@@ -139,10 +141,22 @@ export default {
     if (this.$global.logined) {
       this.getDetails()
     }
+    setTimeout(() => {
+      this.usedMeta.queryTypes = ['活动详情', '各部门情况']
+      this.usedMeta.value = 0
+      this.usedMeta.back = this.back
+      this.usedMeta.flush = this.getDetails
+    }, 100)
+    setTimeout(() => {
+      this.$emit('nav-fade-in')
+    }, 200)
+  },
+  beforeDestroy () {
+    this.$emit('nav-fade-out')
   },
   methods: {
     back () {
-      this.$emit('fade-out')
+      this.$emit('con-fade-out')
       this.$root.$router.push('/activity')
     },
     getDetails () {
@@ -174,11 +188,12 @@ export default {
             vm.data = {}
           }
         }
-        vm.$emit('fade-in')
+        setTimeout(() => {
+          vm.$emit('con-fade-in')
+        }, 100)
         vm.loading = false
       }).catch(data => {
         alert('404！该服务暂时不可用')
-        vm.$emit('fade-in')
         vm.loaing = false
       })
     },

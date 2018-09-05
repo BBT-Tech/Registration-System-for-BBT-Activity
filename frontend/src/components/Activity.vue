@@ -5,21 +5,22 @@
     </div>
     <query-nav
       v-bind:options="meta.queryTypes"
-      v-bind:value="meta.value"
       v-bind:disabled="false"
+      v-bind:nav-visible="navVisible"
+      v-model="meta.value"
       v-on:back="meta.back()"
       v-on:switch="fadeOut"
       v-on:after-switch="meta.flush($event)"
     />
-    <query-con
-      id="query-con"
-    >
+    <div id="query-con">
       <router-view
         v-bind:meta="meta"
-        v-on:fade-in="fadeIn"
-        v-on:fade-out="fadeOut"
+        v-on:con-fade-in="fadeIn"
+        v-on:con-fade-out="fadeOut"
+        v-on:nav-fade-in="navVisible = true"
+        v-on:nav-fade-out="navVisible = false"
       />
-    </query-con>
+    </div>
   </div>
 </template>
 
@@ -36,7 +37,8 @@ export default {
         value: 0,
         back: null,
         flush: null
-      }
+      },
+      navVisible: false
     }
   },
   components: {
@@ -58,8 +60,12 @@ export default {
 </script>
 
 <style scoped>
+#activity {
+  height: 100%;
+}
 #loading-con {
-  position: absolute;
+  z-index: -1;
+  position: fixed;
   width: 100%;
   top: 2.1em;
   bottom: 0;
@@ -74,6 +80,8 @@ export default {
   transform: translate(-50%, -50%)
 }
 #query-con {
+  width: 100%;
+  padding-top: 2.1em;
   opacity: 0;
   transition: opacity 0.1s;
 }

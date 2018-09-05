@@ -23,25 +23,14 @@
         v-on:click="getActivity(false)"
         v-if="!isQueryEnd"
       >
-        <div
-          class="get-activity-box"
-          v-if="!loading"
-        >
+        <div class="get-activity-box" v-if="!loading">
           <div class="get-activity-text">加载更多</div><div class="get-activity-img"></div>
         </div>
-        <div
-          class="loading-box"
-          v-else
-        >
+        <div class="loading-box" v-else>
           <loading number="3"/>
         </div>
       </div>
     </div>
-    <!--button
-      v-on:click="getActivity"
-      v-if="!isQueryEnd && !loading && 0"
-    >查看更多</button>
-    <span v-if="loading && 0">Loading...</span-->
   </div>
 </template>
 
@@ -64,18 +53,26 @@ export default {
     if (this.$global.logined) {
       this.getActivity(false)
     }
-    this.usedMeta.queryTypes = ['所有', '我参与', '未参与']
-    this.usedMeta.value = 0
-    this.usedMeta.back = this.signOut
-    this.usedMeta.flush = this.flushActivity
-    if (this.$global.isManager) {
-      this.usedMeta.queryTypes.push('我发起')
-    }
+    setTimeout(() => {
+      this.usedMeta.queryTypes = ['所有', '我参与', '未参与']
+      this.usedMeta.value = this.currentQueryType
+      this.usedMeta.back = this.signOut
+      this.usedMeta.flush = this.flushActivity
+      if (this.$global.isManager) {
+        this.usedMeta.queryTypes.push('我发起')
+      }
+    }, 100)
+    setTimeout(() => {
+      this.$emit('nav-fade-in')
+    }, 200)
+  },
+  beforeDestroy () {
+    this.$emit('nav-fade-out')
   },
   data () {
     return {
       usedMeta: this.meta,
-      currentQueryType: 0,
+      currentQueryType: Number(document.cookie.replace(/(?:(?:^|.*;\s*)query_type\s*=\s*([^;]*).*$)|^.*$/, '$1')),
       currentStartId: 0,
       queryNumber: 6,
       isQueryEnd: true,
@@ -110,6 +107,7 @@ export default {
       var vm = this
       vm.loading = true
       if (flushed) {
+        document.cookie = 'query_type=' + index
         this.currentQueryType = index
         this.currentStartId = 0
       }
@@ -134,7 +132,9 @@ export default {
           vm.activities = vm.activities.concat(data.activities)
           vm.currentStartId = data.activities.slice(-1)[0].id - 1
           vm.isQueryEnd = data.is_end
-          vm.$emit('fade-in')
+          setTimeout(() => {
+            vm.$emit('con-fade-in')
+          }, 100)
         }
         vm.loading = false
       }).catch(data => {
@@ -146,7 +146,7 @@ export default {
       this.getActivity(true, index)
     },
     toDetails (id) {
-      this.$emit('fade-out')
+      this.$emit('con-fade-out')
       this.$root.$router.push('/activity/' + id)
     }
   }
@@ -227,17 +227,5 @@ export default {
   background-repeat: no-repeat;
   height: 0.71em;
   width: 0.64em;
-}
-.button {
-  cursor: pointer;
-  color: #0000FF;
-  text-decoration: underline;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-.button-active {
-  cursor: default;
-  color: #000000;
-  text-decoration: none;
 }
 </style>

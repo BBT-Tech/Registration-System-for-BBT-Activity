@@ -34,13 +34,13 @@ router.beforeEach((() => {
         if (to.fullPath === '/login') {
           if (Global.logined) {
             next({
-              name: 'Activity'
+              path: '/activity'
             })
           }
         } else {
           if (!Global.logined) {
             next({
-              name: 'Login'
+              path: '/login'
             })
           } else if (to.fullPath.search(/^\/activity\/\d+\/edit$/) !== -1) {
             return Vue.http.post('/api/get-activity.php', {

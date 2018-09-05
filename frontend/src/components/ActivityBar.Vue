@@ -67,7 +67,7 @@ export default {
 
 <style scoped>
 .img {
-  background-image: url(../assets/default.jpg);
+  background-image: url(../assets/default.png);
   background-position: center;
   background-size: cover;
   position: absolute;

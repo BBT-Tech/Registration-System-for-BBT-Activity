@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div id="global-bg"></div>
     <router-view
       v-bind:style="{fontSize: appWidth + 'px'}"
     />
@@ -33,33 +34,41 @@ export default {
 </script>
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    font-family: '微软雅黑';
-  }
-  html {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(145deg, #a1dd93, #16a086) fixed;
-  }
-  body {
-    width: 100%;
-    height: 100%;
-  }
-  input {
-    border: none;
-    outline: none;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  font-family: '微软雅黑';
+}
+html {
+  width: 100%;
+  height: 100%;
+}
+body {
+  width: 100%;
+  height: 100%;
+}
+input {
+  border: none;
+  outline: none;
+}
+#app {
+  position: relative;
+  margin: auto;
+  width: 500px;
+  height: 100%;
+}
+@media screen and (max-width: 500px) {
   #app {
-    position: relative;
-    margin: auto;
-    width: 500px;
-    height: 100%;
+    width: 100%;
   }
-  @media screen and (max-width: 500px) {
-    #app {
-      width: 100%;
-    }
-  }
+}
+#global-bg {
+  z-index: -1;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(145deg, #a1dd93, #16a086);
+}
 </style>
