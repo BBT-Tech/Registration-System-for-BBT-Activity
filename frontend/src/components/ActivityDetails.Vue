@@ -168,12 +168,8 @@ export default {
       }, 200)
     }
   },
-  beforeDestroy () {
-    this.$emit('nav-fade-out')
-  },
   methods: {
     back () {
-      this.$emit('con-fade-out')
       this.$root.$router.push('/activity')
     },
     query (type) {

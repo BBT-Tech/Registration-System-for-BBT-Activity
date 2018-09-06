@@ -41,6 +41,12 @@ export default {
       navVisible: false
     }
   },
+  watch: {
+    '$route' () {
+      this.navVisible = false
+      this.fadeOut()
+    }
+  },
   components: {
     'query-nav': Nav,
     'query-con': Con,

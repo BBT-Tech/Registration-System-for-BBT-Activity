@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="content">
-      <div class="button-export">
+      <div class="button-export" v-on:click="getFile">
         <div>导出参与用户信息</div>
       </div>
       <div
@@ -110,6 +110,10 @@ export default {
         vm.$set(vm.openedList, dep, false)
         vm.$set(vm.loadingList, dep, false)
       })
+    },
+    getFile () {
+      var vm = this
+      vm.$parent.simplePost('/api/manager/download/')
     }
   }
 }

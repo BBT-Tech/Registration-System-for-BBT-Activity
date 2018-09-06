@@ -66,9 +66,6 @@ export default {
       }, 200)
     }
   },
-  beforeDestroy () {
-    this.$emit('nav-fade-out')
-  },
   data () {
     return {
       usedMeta: this.meta,
@@ -150,7 +147,6 @@ export default {
       this.getActivity(true, index)
     },
     toDetails (id) {
-      this.$emit('con-fade-out')
       this.$root.$router.push('/activity/' + id)
     }
   }
