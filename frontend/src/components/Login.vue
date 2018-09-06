@@ -28,8 +28,7 @@
     <div
       class="button"
       v-bind:class="{
-        'button-invalid': !isIdValid || !isPswValid,
-        'button-loading': loading
+        'button-dis': !isIdValid || !isPswValid || loading
       }"
       v-on:click="login"
     >
@@ -166,10 +165,7 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.button-invalid {
-  opacity: 50%;
-}
-.button-loading {
+.button-dis {
   background-color: #e5e5e5;
 }
 </style>

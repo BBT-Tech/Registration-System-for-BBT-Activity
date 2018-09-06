@@ -42,9 +42,10 @@ export default {
     }
   },
   watch: {
-    '$route' () {
-      this.navVisible = false
-      this.fadeOut()
+    '$route' (to, from) {
+      if (to.name !== from.name) {
+        this.navVisible = false
+      }
     }
   },
   components: {

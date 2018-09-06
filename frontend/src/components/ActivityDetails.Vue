@@ -16,106 +16,6 @@
       v-on:con-fade-in="$emit('con-fade-in')"
       v-on:con-fade-out="$emit('con-fade-out')"
     />
-    <!--div>
-      <button v-on:click="back">返回</button>
-      <div v-if="isActivityExist && !loading">
-        <div v-if="data.type === 0">
-          <h3>{{ data.title }}</h3>
-          <div>类型：志愿者活动</div>
-          <div>详情：{{ data.details }}</div>
-          <div>志愿开始时间：{{ data.action_time }}</div>
-          <div>已报名人数：{{ data.current_member }}/{{ data.member }}</div>
-          <div>状态：<span
-              v-if="data.registered"
-            >已报名</span><span
-              v-else-if="!timeBefore"
-            >活动已开始，不予报名</span><span
-              v-else-if="data.member === data.current_member"
-            >报名人数已满</span><span
-              v-else
-            >可报名</span>
-          </div>
-          <button
-            v-if="timeBefore &&
-              data.member > data.current_member &&
-              !data.registered"
-            v-on:click="register"
-          >报名</button>
-          <div v-if="data.is_publisher">
-            <button v-on:click="roll">随机取满</button>
-            <button v-on:click="delActivity">删除</button>
-            <button
-              v-if="timeBefore"
-              v-on:click="$root.$router.push('/activity/' + data.id + '/edit')"
-            >编辑</button>
-          </div>
-        </div>
-        <div v-else-if="data.type === 1">
-          <h3>{{ data.title }}</h3>
-          <div>类型：福利活动</div>
-          <div>详情：{{ data.details }}</div>
-          <div>领取时间：{{ data.book_time }}</div>
-          <div>已领取人数：{{ data.current_member }}/{{ data.award }}</div>
-          <div>状态：<span
-              v-if="data.registered"
-            >已领奖</span><span
-              v-else-if="!timeBefore"
-            >领奖时间未到</span><span
-              v-else-if="data.award === data.current_member"
-            >奖品已被领完</span><span
-              v-else-if="data.is_department_full"
-            >所在部门领取人数已满</span><span
-              v-else
-            >可领取</span>
-          </div>
-          <button
-            v-if="timeBefore &&
-              data.award > data.current_member &&
-              !data.is_department_full &&
-              !data.registered"
-            v-on:click="register"
-          >领取</button>
-          <div v-if="data.is_publisher">
-            <button v-on:click="delActivity">删除</button>
-            <button
-              v-if="!timeBefore"
-              v-on:click="$root.$router.push('/activity/' + data.id + '/edit')"
-            >编辑</button>
-          </div>
-        </div>
-        <div v-if="$global.isManager">
-          <button v-on:click="getFile">导出参与用户信息</button>
-          <br/>
-          <span
-            v-for="queryType in queryTypes"
-            v-bind:key="'queryDepartment' + queryType.type"
-            class="button"
-            v-bind:class="{'button-active': queryType.type === currentQueryType}"
-            v-on:click="currentQueryType = queryType.type"
-          >{{ queryType.name }}</span>
-          <activity-department
-            v-if="currentQueryType === 1"
-            v-bind:data="data"
-            v-on:fold="currentQueryType = 0"
-          />
-          <activity-user
-            v-if="currentQueryType === 2"
-            v-bind:data="data"
-            v-on:fold="currentQueryType = 0"
-          />
-          <br/>
-          <button
-            v-if="currentQueryType !== 0"
-            v-on:click="currentQueryType = 0"
-          >收起</button>
-        </div>
-      </div>
-      <div v-else-if="!isActivityExist && !loading">
-        <h3>你访问的活动已被删除</h3>
-      </div>
-      <div v-else-if="loading">Loading...</div>
-    </div-->
-    <!--activity-editor/-->
   </div>
 </template>
 
@@ -146,6 +46,12 @@ export default {
       this.getDetails()
     }
   },
+  beforeRouteLeave (to, from, next) {
+    this.$emit('con-fade-out')
+    setTimeout(() => {
+      next()
+    }, 100)
+  },
   beforeCreate () {
     if (!this.$global.logined) {
       this.$root.$router.replace('/login')
@@ -174,8 +80,13 @@ export default {
     },
     query (type) {
       this.currentQueryType = type
+      if (!this.ActivityExist) {
+        setTimeout(() => {
+          this.$emit('con-fade-in')
+        }, 100)
+      }
     },
-    getDetails () {
+    getDetails (fn) {
       var vm = this
       vm.$http.post('/api/get-activity.php', {
         type: 0,
@@ -221,7 +132,13 @@ export default {
         }
         return Promise.reject(0)
       }).catch(data => {
+        if (fn !== undefined) {
+          fn()
+        }
         if (data === 0) {
+          setTimeout(() => {
+            this.$emit('con-fade-in')
+          }, 100)
           this.inited = true
         } else if (data instanceof String) {
           alert(data)
@@ -259,11 +176,10 @@ export default {
 
 <style scoped>
 .not-exist {
-  margin: 0 1.37143em;
+  margin: 0.6em 1.37143em 0;
   font-size: 0.7em;
   font-weight: bold;
   color: #fff;
   line-height: 1em;
-  margin-bottom: 0.17143em;
 }
 </style>

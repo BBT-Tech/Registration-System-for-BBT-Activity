@@ -64,9 +64,11 @@
 import InputTips from './InputTips.vue'
 export default {
   name: 'ActivityEditor',
+  props: ['meta'],
   components: {'input-tips': InputTips},
   data () {
     return {
+      usedMeta: this.meta,
       id: 0,
       type: -1,
       title: '',
@@ -153,6 +155,12 @@ export default {
       }
     }
   },
+  beforeRouteLeave (to, from, next) {
+    this.$emit('con-fade-out')
+    setTimeout(() => {
+      next()
+    }, 100)
+  },
   beforeCreate () {
     if (!this.$global.logined) {
       this.$root.$router.replace('/login')
@@ -164,6 +172,15 @@ export default {
   created () {
     if (this.$global.logined && this.$global.isManager) {
       this.checkActivity()
+      setTimeout(() => {
+        this.usedMeta.queryTypes = ['修改活动']
+        this.usedMeta.value = 0
+        this.usedMeta.back = this.back
+        this.usedMeta.flush = () => {}
+      }, 100)
+      setTimeout(() => {
+        this.$emit('nav-fade-in')
+      }, 200)
     }
   },
   methods: {
@@ -256,11 +273,11 @@ export default {
             vm.title = vm.title = activity.title
             vm.prev.details = vm.crn.details = activity.details
             if (vm.type === 0) {
-              vm.prev.time = vm.crn.time = vm.$root.datetimeToInput(activity.action_time)
+              vm.prev.time = vm.crn.time = vm.$global.datetimeToInput(activity.action_time)
               vm.prev.number = vm.crn.number = activity.member
               return Promise.reject(0)
             } else if (vm.type === 1) {
-              vm.prev.time = vm.crn.time = vm.$root.datetimeToInput(activity.book_time)
+              vm.prev.time = vm.crn.time = vm.$global.datetimeToInput(activity.book_time)
               vm.prev.number = vm.crn.number = activity.award
               return vm.$http.post('/api/department.php', {id: vm.id})
             }
@@ -295,6 +312,9 @@ export default {
         }
       }).catch(data => {
         if (data === 0) {
+          setTimeout(() => {
+            vm.$emit('con-fade-in')
+          }, 100)
           vm.loading = true
           return
         } else if (typeof data === 'string') {

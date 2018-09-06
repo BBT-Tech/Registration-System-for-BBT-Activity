@@ -20,6 +20,11 @@ export default {
     var pattern = new RegExp('(?:(?:^|.*;\\s*)' + str + '\\s*=\\s*([^;]*).*$)|^.*$')
     return document.cookie.replace(pattern, '$1')
   },
+  removeCookie (str) {
+    var now = new Date()
+    now.setTime(now.getTime() - 1)
+    document.cookie = str + '=;expires=' + now.toUTCString()
+  },
   compareDatetime (datetime) {
     var now = new Date()
     var comparison = [

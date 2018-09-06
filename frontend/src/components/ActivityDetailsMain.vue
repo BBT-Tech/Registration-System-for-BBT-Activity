@@ -40,16 +40,16 @@
       <div class="buttons">
         <div
           class="button"
-          v-bind:class="{'dis': !before}"
+          v-bind:class="{'dis': !before || registering}"
           v-if="data.type === 0"
           v-on:click="register"
         >
-          <span class="text reg" v-if="!data.registered">报名</span>
+          <div class="text reg" v-if="!data.registered">报名</div>
           <div class="text del sml" v-else>取消报名</div>
         </div>
         <div
           class="button"
-          v-bind:class="{'dis': before}"
+          v-bind:class="{'dis': before || registering}"
           v-else-if="data.type === 1"
           v-on:click="register"
         >
@@ -65,7 +65,11 @@
         >
           <div class="text edit">编辑</div>
         </div>
-        <div class="button" v-on:click="delActivity">
+        <div
+          class="button"
+          v-on:click="delActivity"
+          v-bind:class="{'dis': deleting}"
+        >
           <div class="text del">删除</div>
         </div>
       </div>
@@ -77,6 +81,12 @@
 export default {
   name: 'DetailsMain',
   props: ['data', 'before'],
+  data () {
+    return {
+      registering: false,
+      deleting: false
+    }
+  },
   computed: {
     imageUrl () {
       return {
@@ -98,13 +108,18 @@ export default {
         (vm.data.type === 1 && vm.before)) {
         return
       }
+      vm.registering = true
       if (vm.data.registered) {
         vm.$parent.simplePost('/api/user/unregister/', () => {
-          vm.getDetails()
+          vm.$parent.getDetails(() => {
+            vm.registering = false
+          })
         })
       } else {
         vm.$parent.simplePost('/api/user/register/', () => {
-          vm.getDetails()
+          vm.$parent.getDetails(() => {
+            vm.registering = false
+          })
         })
       }
     },
@@ -126,6 +141,7 @@ export default {
 <style scoped>
 #details-main {
   width: 100%;
+  padding-bottom: 0.001em;
 }
 .image {
   background-position: center;
@@ -165,6 +181,7 @@ export default {
   margin: 0.4em 0 0.6em 0;
 }
 .button {
+  cursor: default;
   float: left;
   width: 2.66em;
   height: 0.86em;

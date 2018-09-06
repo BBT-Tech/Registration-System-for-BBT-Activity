@@ -124,6 +124,7 @@ export default {
   margin: 0 0.96em;
 }
 .button-export {
+  cursor: default;
   margin: 0.4em 0;
   width: 5.2em;
   height: 0.92em;

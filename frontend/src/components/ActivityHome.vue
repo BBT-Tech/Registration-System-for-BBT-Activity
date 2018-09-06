@@ -44,6 +44,12 @@ export default {
     'activity-bar': ActivityBar,
     'loading': Loading
   },
+  beforeRouteLeave (to, from, next) {
+    this.$emit('con-fade-out')
+    setTimeout(() => {
+      next()
+    }, 100)
+  },
   beforeCreate () {
     if (!this.$global.logined) {
       this.$root.$router.replace('/login')
@@ -80,11 +86,18 @@ export default {
   methods: {
     getCookieQueryType () {
       var result = Number(this.$global.getCookie('query_type'))
-      return isNaN(result) ? 0 : result
+      if (isNaN(result) || result % 1 !== 0 || result < 0 || result > 3) {
+        return 0
+      } else if (!this.$global.isManager && result === 3) {
+        return 0
+      } else {
+        return result
+      }
     },
     signOut () {
       if (confirm('确定退出？')) {
         var vm = this
+        vm.$global.removeCookie('query_type')
         vm.$http.post('/api/signOut.php').then(data => {
           data = data.body
           if (!(data instanceof Object)) {

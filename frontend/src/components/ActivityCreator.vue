@@ -66,9 +66,11 @@
 import InputTips from './InputTips.vue'
 export default {
   name: 'ActivityCreator',
+  props: ['meta'],
   components: {'input-tips': InputTips},
   data () {
     return {
+      usedMeta: this.meta,
       type: -1,
       title: '',
       details: '',
@@ -139,6 +141,12 @@ export default {
       }
     }
   },
+  beforeRouteLeave (to, from, next) {
+    this.$emit('con-fade-out')
+    setTimeout(() => {
+      next()
+    }, 100)
+  },
   beforeCreate () {
     if (!this.$global.logined) {
       this.$root.$router.replace('/login')
@@ -147,7 +155,28 @@ export default {
       this.$root.$router.replace('/activity')
     }
   },
+  created () {
+    if (this.$global.logined && this.$global.isManager) {
+      setTimeout(() => {
+        this.usedMeta.queryTypes = ['发起活动']
+        this.usedMeta.value = 0
+        this.usedMeta.back = this.back
+        this.usedMeta.flush = () => {}
+      }, 100)
+      setTimeout(() => {
+        this.$emit('nav-fade-in')
+      }, 200)
+    }
+  },
+  mounted () {
+    setTimeout(() => {
+      this.$emit('con-fade-in')
+    }, 100)
+  },
   methods: {
+    back () {
+      this.$root.$router.push('/activity')
+    },
     addActivity () {
       var vm = this
       var url, send
