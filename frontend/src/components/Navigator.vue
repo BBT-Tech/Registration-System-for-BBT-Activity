@@ -49,7 +49,6 @@ export default {
   watch: {
     navVisible () {
       if (this.navVisible) {
-        console.log(77)
         this.flush()
       } else if (this.inited) {
         document.getElementById('option-computer')
@@ -63,7 +62,6 @@ export default {
   updated () {
     if (!this.inited) {
       this.copyList = document.getElementById('option-computer').childNodes
-      console.log(88)
       this.inited = true
     }
   },
@@ -71,8 +69,6 @@ export default {
     select (index) {
       this.usedValue = this.value
       if ((!this.disabled || !this.inited) && index !== this.usedValue) {
-        console.log(this.copyList)
-        // alert('fuck' + this.usedValue)
         if (index === -1) {
           index = this.usedValue
         } else {
@@ -81,7 +77,6 @@ export default {
             this.$emit('after-switch', this.usedValue)
           }, 200)
         }
-        console.log(this.usedValue)
         var target = this.copyList[index]
         this.$emit('input', index)
         this.copyList[this.usedValue].className = 'option'

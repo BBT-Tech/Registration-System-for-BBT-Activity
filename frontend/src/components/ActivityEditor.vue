@@ -294,7 +294,6 @@ export default {
           return Promise.reject(0)
         }
       }).catch(data => {
-        // console.log(data.construtor)
         if (data === 0) {
           vm.loading = true
           return

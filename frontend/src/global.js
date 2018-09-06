@@ -15,6 +15,11 @@ export default {
     '视频部',
     '视觉设计部'
   ],
+  defaultImg: 'http://localhost/api/assets/img/default.png',
+  getCookie (str) {
+    var pattern = new RegExp('(?:(?:^|.*;\\s*)' + str + '\\s*=\\s*([^;]*).*$)|^.*$')
+    return document.cookie.replace(pattern, '$1')
+  },
   compareDatetime (datetime) {
     var now = new Date()
     var comparison = [

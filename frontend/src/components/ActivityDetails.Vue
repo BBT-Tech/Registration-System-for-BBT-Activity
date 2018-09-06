@@ -1,6 +1,22 @@
 <template>
   <div>
-    <div>
+    <div class="not-exist" v-if="!isActivityExist">
+      你访问的活动已被删除
+    </div>
+    <details-main
+      v-else-if="currentQueryType === 0 && inited"
+      v-bind:data="data"
+      v-bind:before="timeBefore"
+      v-on:con-fade-in="$emit('con-fade-in')"
+      v-on:con-fade-out="$emit('con-fade-out')"
+    />
+    <details-dep
+      v-else-if="currentQueryType === 1 && inited"
+      v-bind:data="depData"
+      v-on:con-fade-in="$emit('con-fade-in')"
+      v-on:con-fade-out="$emit('con-fade-out')"
+    />
+    <!--div>
       <button v-on:click="back">返回</button>
       <div v-if="isActivityExist && !loading">
         <div v-if="data.type === 0">
@@ -12,7 +28,7 @@
           <div>状态：<span
               v-if="data.registered"
             >已报名</span><span
-              v-else-if="!timeAccess"
+              v-else-if="!timeBefore"
             >活动已开始，不予报名</span><span
               v-else-if="data.member === data.current_member"
             >报名人数已满</span><span
@@ -20,7 +36,7 @@
             >可报名</span>
           </div>
           <button
-            v-if="timeAccess &&
+            v-if="timeBefore &&
               data.member > data.current_member &&
               !data.registered"
             v-on:click="register"
@@ -29,7 +45,7 @@
             <button v-on:click="roll">随机取满</button>
             <button v-on:click="delActivity">删除</button>
             <button
-              v-if="timeAccess"
+              v-if="timeBefore"
               v-on:click="$root.$router.push('/activity/' + data.id + '/edit')"
             >编辑</button>
           </div>
@@ -43,7 +59,7 @@
           <div>状态：<span
               v-if="data.registered"
             >已领奖</span><span
-              v-else-if="!timeAccess"
+              v-else-if="!timeBefore"
             >领奖时间未到</span><span
               v-else-if="data.award === data.current_member"
             >奖品已被领完</span><span
@@ -53,7 +69,7 @@
             >可领取</span>
           </div>
           <button
-            v-if="timeAccess &&
+            v-if="timeBefore &&
               data.award > data.current_member &&
               !data.is_department_full &&
               !data.registered"
@@ -62,7 +78,7 @@
           <div v-if="data.is_publisher">
             <button v-on:click="delActivity">删除</button>
             <button
-              v-if="!timeAccess"
+              v-if="!timeBefore"
               v-on:click="$root.$router.push('/activity/' + data.id + '/edit')"
             >编辑</button>
           </div>
@@ -98,37 +114,35 @@
         <h3>你访问的活动已被删除</h3>
       </div>
       <div v-else-if="loading">Loading...</div>
-    </div>
+    </div-->
     <!--activity-editor/-->
   </div>
 </template>
 
 <script>
-import ActivityDepartment from './ActivityDepartment.vue'
-import ActivityUser from './ActivityUser.vue'
+import DetailsMain from './ActivityDetailsMain.vue'
+import DetailsDep from './ActivityDetailsDep.vue'
 export default {
   name: 'ActivityDetails',
   components: {
-    'activity-department': ActivityDepartment,
-    'activity-user': ActivityUser
+    'details-main': DetailsMain,
+    'details-dep': DetailsDep
   },
   props: ['meta'],
   data () {
     return {
       usedMeta: this.meta,
-      queryTypes: [
-        {name: '各部门情况', type: 1},
-        {name: '参与人信息', type: 2}
-      ],
       currentQueryType: 0,
       isActivityExist: true,
-      timeAccess: false,
-      loading: false,
-      data: {}
+      timeBefore: false,
+      data: {},
+      depData: {},
+      inited: false
     }
   },
   watch: {
     '$route.params.id' () {
+      this.$emit('con-fade-out')
       this.getDetails()
     }
   },
@@ -140,16 +154,19 @@ export default {
   created () {
     if (this.$global.logined) {
       this.getDetails()
+      setTimeout(() => {
+        this.usedMeta.queryTypes = ['活动详情']
+        this.usedMeta.value = 0
+        this.usedMeta.back = this.back
+        this.usedMeta.flush = this.query
+        if (this.$global.isManager) {
+          this.usedMeta.queryTypes.push('各部门情况')
+        }
+      }, 100)
+      setTimeout(() => {
+        this.$emit('nav-fade-in')
+      }, 200)
     }
-    setTimeout(() => {
-      this.usedMeta.queryTypes = ['活动详情', '各部门情况']
-      this.usedMeta.value = 0
-      this.usedMeta.back = this.back
-      this.usedMeta.flush = this.getDetails
-    }, 100)
-    setTimeout(() => {
-      this.$emit('nav-fade-in')
-    }, 200)
   },
   beforeDestroy () {
     this.$emit('nav-fade-out')
@@ -159,9 +176,11 @@ export default {
       this.$emit('con-fade-out')
       this.$root.$router.push('/activity')
     },
+    query (type) {
+      this.currentQueryType = type
+    },
     getDetails () {
       var vm = this
-      vm.loading = true
       vm.$http.post('/api/get-activity.php', {
         type: 0,
         start_id: vm.$route.params.id,
@@ -169,9 +188,9 @@ export default {
       }).then(data => {
         data = data.body
         if (!(data instanceof Object)) {
-          alert('服务器发生错误')
+          return Promise.reject('服务器发生错误')
         } else if (data.err_code) {
-          alert(data.err_msg)
+          return Promise.reject(data.err_msg)
         } else {
           data = data.data
           vm.isActivityExist = data.activities instanceof Array &&
@@ -180,21 +199,39 @@ export default {
           if (vm.isActivityExist) {
             vm.data = data.activities[0]
             if (vm.data.type === 0) {
-              vm.timeAccess = vm.$global.compareDatetime(vm.data.action_time) >= 0
+              vm.timeBefore = vm.$global.compareDatetime(vm.data.action_time) > 0
             } else if (vm.data.type === 1) {
-              vm.timeAccess = vm.$global.compareDatetime(vm.data.book_time) < 0
+              vm.timeBefore = vm.$global.compareDatetime(vm.data.book_time) > 0
+            }
+            if (this.$global.isManager) {
+              return vm.$http.post('/api/department.php', {
+                id: vm.$route.params.id
+              })
             }
           } else {
             vm.data = {}
           }
         }
-        setTimeout(() => {
-          vm.$emit('con-fade-in')
-        }, 100)
-        vm.loading = false
+        return Promise.reject(0)
+      }).then(data => {
+        data = data.body
+        if (!(data instanceof Object)) {
+          return Promise.reject('服务器发生错误')
+        } else if (data.err_code) {
+          return Promise.reject(data.err_msg)
+        } else {
+          vm.depData = data.data
+          vm.$set(vm.depData, 'type', vm.data.type)
+        }
+        return Promise.reject(0)
       }).catch(data => {
-        alert('404！该服务暂时不可用')
-        vm.loaing = false
+        if (data === 0) {
+          this.inited = true
+        } else if (data instanceof String) {
+          alert(data)
+        } else {
+          alert('404！该服务暂时不可用')
+        }
       })
     },
     simplePost (route, fn) {
@@ -211,24 +248,9 @@ export default {
         }
       }).catch(data => {
         alert('404！该服务暂时不可用')
-      })
-    },
-    register () {
-      var vm = this
-      vm.simplePost('/api/user/register/', () => {
-        vm.getDetails()
-      })
-    },
-    roll () {
-      var vm = this
-      vm.simplePost('/api/publisher/roll/', () => {
-        vm.getDetails()
-      })
-    },
-    delActivity () {
-      var vm = this
-      vm.simplePost('/api/publisher/delete/', () => {
-        vm.$root.$router.replace('/activity')
+        if (fn !== undefined) {
+          fn()
+        }
       })
     },
     getFile () {
@@ -239,20 +261,13 @@ export default {
 }
 </script>
 
-<style>
-button {
-  margin: 3px;
-}
-.button {
-  cursor: pointer;
-  color: #0000FF;
-  text-decoration: underline;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-.button-active {
-  cursor: default;
-  color: #000000;
-  text-decoration: none;
+<style scoped>
+.not-exist {
+  margin: 0 1.37143em;
+  font-size: 0.7em;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1em;
+  margin-bottom: 0.17143em;
 }
 </style>

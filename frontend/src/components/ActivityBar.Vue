@@ -3,7 +3,7 @@
     class="activity-bar"
     v-on:click="$emit('click')"
   >
-    <div class="img" v-on:load="console.log(5)"></div>
+    <div class="img" v-bind:style="imageUrl"></div>
     <div class="content">
       <div class="title">{{ data.title }}</div>
       <div class="info time">
@@ -61,13 +61,21 @@
 <script>
 export default {
   name: 'ActivityBar',
-  props: ['data']
+  props: ['data'],
+  computed: {
+    imageUrl () {
+      return {
+        backgroundImage: 'url(' +
+        (this.data.image === '' ? this.$global.defaultImg : this.data.image) +
+        ')'
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
 .img {
-  background-image: url(../assets/default.png);
   background-position: center;
   background-size: cover;
   position: absolute;

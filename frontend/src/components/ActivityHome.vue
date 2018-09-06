@@ -52,19 +52,19 @@ export default {
   created () {
     if (this.$global.logined) {
       this.getActivity(false)
+      setTimeout(() => {
+        this.usedMeta.queryTypes = ['所有', '我参与', '未参与']
+        this.usedMeta.value = this.currentQueryType
+        this.usedMeta.back = this.signOut
+        this.usedMeta.flush = this.flushActivity
+        if (this.$global.isManager) {
+          this.usedMeta.queryTypes.push('我发起')
+        }
+      }, 100)
+      setTimeout(() => {
+        this.$emit('nav-fade-in')
+      }, 200)
     }
-    setTimeout(() => {
-      this.usedMeta.queryTypes = ['所有', '我参与', '未参与']
-      this.usedMeta.value = this.currentQueryType
-      this.usedMeta.back = this.signOut
-      this.usedMeta.flush = this.flushActivity
-      if (this.$global.isManager) {
-        this.usedMeta.queryTypes.push('我发起')
-      }
-    }, 100)
-    setTimeout(() => {
-      this.$emit('nav-fade-in')
-    }, 200)
   },
   beforeDestroy () {
     this.$emit('nav-fade-out')
@@ -72,7 +72,7 @@ export default {
   data () {
     return {
       usedMeta: this.meta,
-      currentQueryType: Number(document.cookie.replace(/(?:(?:^|.*;\s*)query_type\s*=\s*([^;]*).*$)|^.*$/, '$1')),
+      currentQueryType: this.getCookieQueryType(),
       currentStartId: 0,
       queryNumber: 6,
       isQueryEnd: true,
@@ -81,6 +81,10 @@ export default {
     }
   },
   methods: {
+    getCookieQueryType () {
+      var result = Number(this.$global.getCookie('query_type'))
+      return isNaN(result) ? 0 : result
+    },
     signOut () {
       if (confirm('确定退出？')) {
         var vm = this
@@ -108,8 +112,8 @@ export default {
       vm.loading = true
       if (flushed) {
         document.cookie = 'query_type=' + index
-        this.currentQueryType = index
-        this.currentStartId = 0
+        vm.currentQueryType = index
+        vm.currentStartId = 0
       }
       vm.$http.post('/api/get-activity.php', {
         type: vm.currentQueryType,
@@ -124,10 +128,10 @@ export default {
         } else {
           data = data.data
           if (flushed) {
-            this.currentQueryType = index
-            this.activities = []
-            this.currentStartId = 0
-            this.isQueryEnd = true
+            vm.currentQueryType = index
+            vm.activities = []
+            vm.currentStartId = 0
+            vm.isQueryEnd = true
           }
           vm.activities = vm.activities.concat(data.activities)
           vm.currentStartId = data.activities.slice(-1)[0].id - 1
