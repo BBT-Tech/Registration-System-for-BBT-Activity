@@ -23,38 +23,6 @@
         </div>
       </div>
     </div>
-    <!--div v-if="data.type === 0">
-      <div>志愿活动标题：{{ data.title }}</div>
-      <div>详情：{{ data.details }}</div>
-      <div>志愿开始时间：{{ data.action_time }}</div>
-      <div>已报名人数：{{ data.current_member }}/{{ data.member }}</div>
-      <div
-        class="activity-error-tip"
-        v-if="$root.compareDatetime(data.action_time) < 0"
-      >活动已开始，不予报名</div>
-      <div
-        class="activity-error-tip"
-        v-else-if="data.member === data.current_member"
-      >报名人数已满</div>
-    </div>
-    <div v-else-if="data.type === 1">
-      <div>福利活动标题：{{ data.title }}</div>
-      <div>详情：{{ data.details }}</div>
-      <div>领取时间：{{ data.book_time }}</div>
-      <div>已领取人数：{{ data.current_member }}/{{ data.award }}</div>
-      <div
-        class="activity-error-tip"
-        v-if="$root.compareDatetime(data.book_time) >= 0"
-      >领奖时间未到</div>
-      <div
-        class="activity-error-tip"
-        v-else-if="data.award === data.current_member"
-      >奖品已被领完</div>
-      <div
-        class="activity-error-tip"
-        v-else-if="data.is_department_full"
-      >所在部门领取人数已满</div>
-    </div-->
   </div>
 </template>
 
@@ -114,10 +82,10 @@ export default {
   position: relative;
 }
 .time {
-  background-image: url(../assets/clock-icon.png);
+  background-image: url(../assets/img/clock-icon.png);
 }
 .member {
-  background-image: url(../assets/member-icon.png);
+  background-image: url(../assets/img/member-icon.png);
 }
 .info > div {
   position: absolute;

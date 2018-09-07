@@ -2,7 +2,7 @@
   <div id="navigator">
     <div class="img-bg"></div>
     <div class="img-container">
-      <img src="@/assets/back-button.png" v-on:click="$emit('back')"/>
+      <img src="@/assets/img/back-button.png" v-on:click="$emit('back')"/>
     </div>
     <div class="option-container">
       <div class="scrollbar-x-mask">

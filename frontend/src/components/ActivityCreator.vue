@@ -79,15 +79,17 @@
         v-if="type === 1 && isNumberValid && !isSumValid"
       >限制总人数应不小于奖品数</div>
     </div>
-    <div
-      v-if="type !== -1"
-      class="button"
-      v-bind:class="{
-        'button-dis': !isValid || loading
-      }"
-      v-on:click="addActivity"
-    >
-      <div class="button-text">发 布</div>
+    <div class="button-content">
+      <div
+        v-if="type !== -1"
+        class="button"
+        v-bind:class="{
+          'button-dis': !isValid || loading
+        }"
+        v-on:click="!isValid || loading || addActivity()"
+      >
+        <div class="button-text">发 布</div>
+      </div>
     </div>
   </div>
 </template>
@@ -148,8 +150,7 @@ export default {
       return this.isPosInt(this.number)
     },
     isSameValid () {
-      return this.same >= 0 &&
-        this.same % 1 === 0
+      return this.isPosInt(this.same)
     },
     isSumValid () {
       var sum = 0
@@ -178,7 +179,7 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     if (this.saved || (this.type === -1 && this.image === '') ||
-      confirm('确定要放弃当前工作？')) {
+      confirm('确定放弃当前工作？')) {
       this.$emit('con-fade-out')
       setTimeout(() => {
         next()
@@ -224,9 +225,6 @@ export default {
     },
     addActivity () {
       var vm = this
-      if (!vm.isValid && vm.loading) {
-        return
-      }
       var url, send
       vm.loading = true
       if (vm.type === 0) {
@@ -289,72 +287,5 @@ export default {
 </script>
 
 <style scoped>
-#activity-creator {
-  width: 100%;
-  margin-bottom: 0.001em;
-}
-.image {
-  background-position: center;
-  background-size: cover;
-  margin: auto;
-  margin-top: 0.6em;
-  margin-bottom: 0.6em;
-  width: 420px;
-  height: 236.25px;
-}
-@media screen and (max-width: 420px) {
-  .image {
-    width: 100%;
-    height: 56.25vw;
-  }
-}
-.content {
-  margin: 0 0.96em;
-  position: relative;
-}
-.error {
-  color: #ff0000
-}
-option {
-  color: #000;
-}
-option[disabled] {
-  color: #666;
-}
-.sum-error {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  color: rgba(255, 0, 0, 0.6);
-  font-size: 0.5em;
-  font-weight: bold;
-}
-.button {
-  cursor: default;
-  margin: auto;
-  margin-bottom: 0.6em;
-  box-shadow: 0.1em 0.1em 0.25em rgba(80, 80, 80, 0.5);
-  background-color: #fff;
-  width: 6em;
-  height: 1.46em;
-  border-radius: 0.73em;
-  font-size: 0.72em;
-  font-weight: bold;
-  word-spacing: 0.25em;
-  color: #9dd98b;
-  position: relative;
-}
-.button-text {
-  height: 1em;
-  line-height: 1em;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.button-dis {
-  background-color: #e5e5e5;
-}
+@import '../assets/css/CreatorEditor.css';
 </style>

@@ -26,7 +26,6 @@
 
 <script>
 import Nav from './Navigator.vue'
-import Con from './Content.vue'
 import Loading from './Loading.vue'
 export default {
   name: 'Activity',
@@ -50,7 +49,6 @@ export default {
   },
   components: {
     'query-nav': Nav,
-    'query-con': Con,
     'loading': Loading
   },
   methods: {

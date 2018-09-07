@@ -1,30 +1,57 @@
 <template>
-  <div>
-    <button v-on:click="back">返回</button>
-    <div v-if="loading">
-      <div v-if="type === 0">类型：志愿者活动</div>
-      <div v-else-if="type === 1">类型：福利活动</div>
-      <div>标题：{{ title }}</div>
+  <div id="activity-editor">
+    <div class="image">
+      <input-image
+        v-on:change="crn.image = $event"
+        v-bind:first="false"
+        v-bind:src="prev.image"
+      >
+        <template slot="before">轻触以修改</template>
+        <template slot="after">轻触取消修改</template>
+      </input-image>
+    </div>
+    <div class="content">
+      <div class="uneditable">
+        <div class="flex-title">
+          <div class="title">活动类型：</div>
+        </div>
+        <div class="flex-value">
+          <div class="value" v-if="type === 0">志愿者活动</div>
+          <div class="value" v-else-if="type === 1">福利活动</div>
+        </div>
+      </div>
+      <div class="uneditable">
+        <div class="flex-title">
+          <div class="title">标题：</div>
+        </div>
+        <div class="flex-value">
+          <div class="value">{{ title }}</div>
+        </div>
+      </div>
       <input-tips v-model="crn.details" v-bind:err-when="!isDetailsValid">
-        <span slot="title">详情：</span>
-        <span slot="tips">详情不能为空</span>
+        <template slot="title">详情：</template>
+        <span slot="tips" v-if="crn.details === ''">详情不能为空</span>
+        <span slot="tips" v-else>详情应不超过100字符</span>
       </input-tips>
       <input-tips type="datetime-local" v-model="crn.time" v-bind:err-when="!isTimeValid">
-        <span slot="title" v-if="type === 0">志愿开始时间：</span>
-        <span slot="title" v-else-if="type === 1">福利领取时间：</span>
+        <template slot="title">时间：</template>
         <span slot="tips" v-if="crn.time === ''">时间信息不全</span>
         <span slot="tips" v-else>时间必须晚于当前</span>
       </input-tips>
       <input-tips type="number" v-model.number="crn.number" v-bind:err-when="!isNumberValid">
         <span slot="title" v-if="type === 0">限制人数：</span>
         <span slot="title" v-else-if="type === 1">奖品总数：</span>
-        <span slot="tips">数量格式不正确</span>
+        <span slot="tips" v-if="type === 0 && crn.number < prev.number">志愿人数不应减少</span>
+        <span slot="tips" v-else>数量应为正整数</span>
       </input-tips>
       <div v-if="type === 1">
-        各部门人数限制：<select v-model.number="inputType">
-          <option value="1">各部门相同</option>
-          <option value="2">自定义</option>
-        </select>
+        <input-tips type="select" v-model.number="inputType" v-bind:err-when="false">
+          <template slot="title">各部门人数限制：</template>
+          <template slot="options">
+            <option value="1">各部门相同</option>
+            <option value="2">自定义</option>
+          </template>
+        </input-tips>
         <div v-if="inputType === 1">
           <input-tips
             type="number"
@@ -32,8 +59,8 @@
             v-bind:value="same"
             v-bind:err-when="!isSameValid"
           >
-            <span slot="title">所有部门：</span>
-            <span slot="tips">数量格式不正确</span>
+            <span slot="title">各个部门：</span>
+            <span slot="tips" v-if="!isNumberValid || isSumValid">数量应为正整数</span>
           </input-tips>
         </div>
         <div v-else-if="inputType === 2">
@@ -42,30 +69,46 @@
               type="number"
               v-on:input="checkList($set(crn.numberList, i, Number($event)))"
               v-bind:value="crn.numberList[i]"
-              v-bind:err-when="crn.numberList[i] === '' ||
-                crn.numberList[i] < 0 ||
-                crn.numberList[i] % 1 !== 0"
+              v-bind:err-when="!isPosInt(crn.numberList[i])"
             >
-              <span slot="title">{{ $root.departmentList[i] }}：</span>
-              <span slot="tips">数量格式不正确</span>
+              <span slot="title">{{ $global.departmentList[i] }}：</span>
+              <span
+                slot="tips"
+                v-if="i !== 9 || (!isNumberValid || isSumValid)"
+              >数量应为正整数</span>
             </input-tips>
           </div>
         </div>
-        <div class="error" v-if="isNumberValid && !isSumValid">限制总人数不小于奖品数</div>
       </div>
-      <button v-if="edited && isValid && !saving" v-on:click="saveActivity">保存</button>
-      <div v-if="saving">Loading...</div>
+      <div
+        class="sum-error"
+        v-if="type === 1 && isNumberValid && !isSumValid"
+      >限制总人数应不小于奖品数</div>
     </div>
-    <div v-else>Loading...</div>
+    <div class="button-content">
+      <div
+        class="button"
+        v-bind:class="{
+          'button-dis': !edited || !isValid || loading
+        }"
+        v-on:click="!edited || !isValid || loading || saveActivity()"
+      >
+        <div class="button-text">保 存</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import InputTips from './InputTips.vue'
+import InputTips from './InputTips2.vue'
+import InputImage from './InputImage.vue'
 export default {
   name: 'ActivityEditor',
   props: ['meta'],
-  components: {'input-tips': InputTips},
+  components: {
+    'input-tips': InputTips,
+    'input-image': InputImage
+  },
   data () {
     return {
       usedMeta: this.meta,
@@ -76,19 +119,21 @@ export default {
       same: 0,
       isListEdited: false,
       prev: {
+        image: '',
         details: '',
         time: '',
         number: 0,
         numberList: []
       },
       crn: {
+        image: '',
         details: '',
         time: '',
         number: 0,
         numberList: []
       },
       loading: false,
-      saving: false
+      saved: false
     }
   },
   watch: {
@@ -109,12 +154,14 @@ export default {
         this.$global.compareDatetime(this.crn.time + ':00') > 0
     },
     isNumberValid () {
-      return this.crn.number > 0 &&
-        this.crn.number % 1 === 0
+      if (this.type === 0) {
+        return this.isPosInt(this.crn.number) && this.crn.number >= this.prev.number
+      } else if (this.type === 1) {
+        return this.isPosInt(this.crn.number)
+      }
     },
     isSameValid () {
-      return this.same >= 0 &&
-        this.same % 1 === 0
+      return this.isPosInt(this.same)
     },
     isSumValid () {
       var sum = 0
@@ -147,7 +194,8 @@ export default {
       var vm = this
       var edited = vm.crn.details !== vm.prev.details ||
         vm.crn.time !== vm.prev.time ||
-        vm.crn.number !== vm.prev.number
+        vm.crn.number !== vm.prev.number ||
+        vm.crn.image !== ''
       if (vm.type === 0) {
         return edited
       } else if (vm.type === 1) {
@@ -156,10 +204,15 @@ export default {
     }
   },
   beforeRouteLeave (to, from, next) {
-    this.$emit('con-fade-out')
-    setTimeout(() => {
-      next()
-    }, 100)
+    if (this.saved || !this.edited ||
+      confirm('确定放弃当前更改？')) {
+      this.$emit('con-fade-out')
+      setTimeout(() => {
+        next()
+      }, 100)
+    } else {
+      next(false)
+    }
   },
   beforeCreate () {
     if (!this.$global.logined) {
@@ -184,6 +237,11 @@ export default {
     }
   },
   methods: {
+    isPosInt (number) {
+      return number !== '' &&
+        number > 0 &&
+        number % 1 === 0
+    },
     toSame () {
       var vm = this
       vm.crn.numberList.forEach((value, index) => {
@@ -209,19 +267,19 @@ export default {
     saveActivity () {
       var vm = this
       var url, send
-      vm.saving = true
+      vm.loading = true
       if (vm.type === 0) {
         url = '/api/publisher/modify/volunteer/' + vm.$route.params.id
         send = {
           details: vm.crn.details,
-          action_time: vm.$root.inputToDatetime(vm.crn.time),
+          action_time: vm.$global.inputToDatetime(vm.crn.time),
           member: vm.crn.number
         }
       } else if (vm.type === 1) {
         url = '/api/publisher/modify/award/' + vm.$route.params.id
         send = {
           details: vm.crn.details,
-          book_time: vm.$root.inputToDatetime(vm.crn.time),
+          book_time: vm.$global.inputToDatetime(vm.crn.time),
           award: vm.crn.number,
           member_list: vm.crn.numberList
         }
@@ -233,12 +291,33 @@ export default {
         } else if (data.err_code) {
           alert(data.err_msg)
         } else {
-          vm.$root.$router.push('/activity/' + vm.$route.params.id)
+          if (vm.crn.image !== '') {
+            var fd = new FormData()
+            fd.append('image', vm.image)
+            return vm.$http.post('/api/publisher/modify/image/' + vm.id, fd)
+          } else {
+            return Promise.reject(0)
+          }
         }
-        vm.saving = false
+      }).then(data => {
+        data = data.body
+        if (!(data instanceof Object)) {
+          return Promise.reject('服务器发生错误')
+        } else if (data.err_code) {
+          return Promise.reject(data.err_msg)
+        } else {
+          return Promise.reject(0)
+        }
       }).catch(data => {
-        alert('404！该服务暂时不可用')
-        vm.saving = false
+        vm.loading = false
+        if (data === 0) {
+          vm.saved = true
+          vm.$root.$router.push('/activity/' + vm.$route.params.id)
+        } else if (typeof data === 'string') {
+          alert(data)
+        } else {
+          alert('404！该服务暂时不可用')
+        }
       })
     },
     checkActivity () {
@@ -272,6 +351,7 @@ export default {
             vm.type = activity.type
             vm.title = vm.title = activity.title
             vm.prev.details = vm.crn.details = activity.details
+            vm.prev.image = activity.image
             if (vm.type === 0) {
               vm.prev.time = vm.crn.time = vm.$global.datetimeToInput(activity.action_time)
               vm.prev.number = vm.crn.number = activity.member
@@ -315,7 +395,6 @@ export default {
           setTimeout(() => {
             vm.$emit('con-fade-in')
           }, 100)
-          vm.loading = true
           return
         } else if (typeof data === 'string') {
           alert(data)
@@ -330,7 +409,33 @@ export default {
 </script>
 
 <style scoped>
-.error {
-  color: #ff0000
+@import '../assets/css/CreatorEditor.css';
+.uneditable {
+  display: flex;
+  width: 100%;
+  margin-bottom: 0.6em;
+}
+.flex-title {
+  flex-shrink: 0;
+}
+.title {
+  color: #fff;
+  font-size: 0.6em;
+  font-weight: bold;
+  height: 1em;
+  line-height: 1em;
+  padding: 0.25em 0;
+}
+.flex-value {
+  color: #fff;
+  width: 100%;
+  flex-shrink: 1;
+  padding: 0.07em 0;
+}
+.value {
+  width: 100%;
+  font-size: 0.6em;
+  line-height: 1.266667em;
+  word-wrap: break-word;
 }
 </style>

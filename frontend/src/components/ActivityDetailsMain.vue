@@ -42,7 +42,7 @@
           class="button"
           v-bind:class="{'dis': !before || registering}"
           v-if="data.type === 0"
-          v-on:click="register"
+          v-on:click="!before || registering || register()"
         >
           <div class="text reg" v-if="!data.registered">报名</div>
           <div class="text del sml" v-else>取消报名</div>
@@ -51,7 +51,7 @@
           class="button"
           v-bind:class="{'dis': before || registering}"
           v-else-if="data.type === 1"
-          v-on:click="register"
+          v-on:click="before || registering || register()"
         >
           <div class="text reg" v-if="!data.registered">领奖</div>
           <div class="text del sml" v-else>放弃奖品</div>
@@ -61,13 +61,13 @@
         <div
           class="button"
           v-bind:class="{'dis': !before}"
-          v-on:click="editActivity"
+          v-on:click="!before || editActivity()"
         >
           <div class="text edit">编辑</div>
         </div>
         <div
           class="button"
-          v-on:click="delActivity"
+          v-on:click="deleting || delActivity()"
           v-bind:class="{'dis': deleting}"
         >
           <div class="text del">删除</div>
@@ -125,6 +125,7 @@ export default {
     },
     delActivity () {
       var vm = this
+      vm.deleting = true
       vm.$parent.simplePost('/api/publisher/delete/', () => {
         vm.$root.$router.replace('/activity')
       })

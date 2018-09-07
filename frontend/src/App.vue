@@ -50,6 +50,7 @@ body {
 input {
   border: none;
   outline: none;
+  -webkit-appearance: none;
 }
 #app {
   position: relative;

@@ -20,7 +20,7 @@
             v-if="current !== 0"
             class="dep-button"
             v-on:click="foldSwitch(index)"
-          ><img src="@/assets/arrow.png" v-bind:class="{'opened': openedList[index]}"/></div>
+          ><img src="@/assets/img/arrow.png" v-bind:class="{'opened': openedList[index]}"/></div>
         </div>
         <div v-if="openedList[index]">
           <div v-if="!loadingList[index]">

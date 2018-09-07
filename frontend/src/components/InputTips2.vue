@@ -81,6 +81,7 @@ export default {
   border: 0.133333em solid #fff;
   border-radius: 0.416667em;
   color: #fff;
+  white-space: nowrap;
 }
 input {
   height: 1em;
@@ -108,7 +109,7 @@ select {
   top: 0;
   height: 0.9em;
   width: 0.9em;
-  background-image: url(../assets/unfold.png);
+  background-image: url(../assets/img/unfold.png);
   background-position: center;
   background-repeat: no-repeat;
   background-origin: padding-box;

@@ -6,7 +6,7 @@
         v-if="$global.isManager && currentQueryType === 3"
         v-on:click="$root.$router.push('/activity/publish')"
       >
-        <img id="add-icon" src="@/assets/add-icon.png"/>
+        <img id="add-icon" src="@/assets/img/add-icon.png"/>
         <div id="add-text-box">
           <div id="add-text">添加活动</div>
         </div>
@@ -234,7 +234,7 @@ export default {
 .get-activity-img {
   display: inline-block;
   vertical-align: top;
-  background-image: url(../assets/down.png);
+  background-image: url(../assets/img/down.png);
   background-position: 0 0.05em;
   background-size: auto 97.1831%;
   background-repeat: no-repeat;
