@@ -98,7 +98,7 @@ export default {
       if (confirm('确定退出？')) {
         var vm = this
         vm.$global.removeCookie('query_type')
-        vm.$http.post('/api/signOut.php').then(data => {
+        vm.$http.post('/api/signout.php').then(data => {
           data = data.body
           if (!(data instanceof Object)) {
             alert('服务器发生错误')
