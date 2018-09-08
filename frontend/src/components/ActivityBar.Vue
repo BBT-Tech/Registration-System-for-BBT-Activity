@@ -3,7 +3,12 @@
     class="activity-bar"
     v-on:click="$emit('click')"
   >
-    <div class="img" v-bind:style="imageUrl"></div>
+    <div class="image">
+      <img
+        v-bind:src="imageUrl"
+        v-on:load="$event.target.nextSibling.style.opacity = '1'"
+      /><div v-bind:style="{backgroundImage: 'url(' + imageUrl + ')'}"></div>
+    </div>
     <div class="content">
       <div class="title">{{ data.title }}</div>
       <div class="info time">
@@ -32,20 +37,14 @@ export default {
   props: ['data'],
   computed: {
     imageUrl () {
-      return {
-        backgroundImage: 'url(' +
-        (this.data.image === '' ? this.$global.defaultImg : this.data.image) +
-        ')'
-      }
+      return this.data.image === '' ? this.$global.defaultImg : this.data.image
     }
   }
 }
 </script>
 
 <style scoped>
-.img {
-  background-position: center;
-  background-size: cover;
+.image {
   position: absolute;
   top: 0;
   left: 0;
@@ -53,6 +52,17 @@ export default {
   width: 4.26667em;
   border-top-left-radius: 0.24em;
   border-bottom-left-radius: 0.24em;
+}
+.image > img {
+  display: none;
+}
+.image > div {
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 0.8s;
 }
 .content {
   position: absolute;

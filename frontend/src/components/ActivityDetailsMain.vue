@@ -1,6 +1,11 @@
 <template>
   <div id="details-main">
-    <div class="image" v-bind:style="imageUrl"></div>
+    <div class="image" v-bind:style="imageUrl">
+      <img
+        v-bind:src="imageUrl"
+        v-on:load="$event.target.nextSibling.style.opacity = '1'"
+      /><div v-bind:style="{backgroundImage: 'url(' + imageUrl + ')'}"></div>
+    </div>
     <div class="content">
       <div class="title">{{ data.title }}</div>
       <div class="options" v-if="data.type === 0">
@@ -89,11 +94,7 @@ export default {
   },
   computed: {
     imageUrl () {
-      return {
-        backgroundImage: 'url(' +
-        (this.data.image === '' ? this.$global.defaultImg : this.data.image) +
-        ')'
-      }
+      return this.data.image === '' ? this.$global.defaultImg : this.data.image
     }
   },
   mounted () {
@@ -102,6 +103,9 @@ export default {
     }, 100)
   },
   methods: {
+    foo (target) {
+      console.log(target)
+    },
     register () {
       var vm = this
       if ((vm.data.type === 0 && !vm.before) ||
@@ -145,13 +149,23 @@ export default {
   padding-bottom: 0.001em;
 }
 .image {
-  background-position: center;
-  background-size: cover;
+  background-color: #eee;
   margin: auto;
   margin-top: 0.6em;
   margin-bottom: 0.6em;
   width: 420px;
   height: 236.25px;
+}
+.image > img {
+  display: none;
+}
+.image > div {
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 0.8s;
 }
 @media screen and (max-width: 420px) {
   .image {

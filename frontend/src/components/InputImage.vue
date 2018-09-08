@@ -113,6 +113,7 @@ export default {
 <style scoped>
 #image-inputer-box {
   cursor: default;
+  background: onload;
   background-position: center;
   background-size: cover;
   background-color: #eee;
@@ -124,6 +125,7 @@ export default {
   display: none;
 }
 .image {
+  background: onload;
   background-position: center;
   background-size: cover;
   position: absolute;
