@@ -98,7 +98,7 @@ export default {
       if (confirm('确定退出？')) {
         var vm = this
         vm.$global.removeCookie('query_type')
-        vm.$http.post('/api/signout.php').then(data => {
+        vm.$http.post(vm.$global.urls.signout()).then(data => {
           data = data.body
           if (!(data instanceof Object)) {
             alert('服务器发生错误')
@@ -125,7 +125,7 @@ export default {
         vm.currentQueryType = index
         vm.currentStartId = 0
       }
-      vm.$http.post('/api/get-activity.php', {
+      vm.$http.post(vm.$global.urls.queryA(), {
         type: vm.currentQueryType,
         start_id: vm.currentStartId,
         number: vm.queryNumber

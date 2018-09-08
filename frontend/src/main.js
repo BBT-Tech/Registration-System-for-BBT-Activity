@@ -16,7 +16,7 @@ router.beforeEach((() => {
   return (to, from, next) => {
     if (!isChecked) {
       isChecked = true
-      Vue.http.post('/api/init.php').then(data => {
+      Vue.http.post(Global.urls.init()).then(data => {
         data = data.body
         if (!(data instanceof Object)) {
           return Promise.reject('服务器发生错误')
@@ -43,7 +43,7 @@ router.beforeEach((() => {
               path: '/login'
             })
           } else if (to.fullPath.search(/^\/activity\/\d+\/edit$/) !== -1) {
-            return Vue.http.post('/api/get-activity.php', {
+            return Vue.http.post(Global.urls.queryA(), {
               type: 0,
               start_id: to.params.id,
               number: 1

@@ -1,10 +1,10 @@
 <template>
   <div id="details-main">
-    <div class="image" v-bind:style="imageUrl">
+    <div class="image">
       <img
-        v-bind:src="imageUrl"
+        v-bind:src="data.image"
         v-on:load="$event.target.nextSibling.style.opacity = '1'"
-      /><div v-bind:style="{backgroundImage: 'url(' + imageUrl + ')'}"></div>
+      /><div v-bind:style="{backgroundImage: 'url(' + data.image + ')'}"></div>
     </div>
     <div class="content">
       <div class="title">{{ data.title }}</div>
@@ -92,11 +92,6 @@ export default {
       deleting: false
     }
   },
-  computed: {
-    imageUrl () {
-      return this.data.image === '' ? this.$global.defaultImg : this.data.image
-    }
-  },
   mounted () {
     setTimeout(() => {
       this.$emit('con-fade-in')
@@ -114,13 +109,13 @@ export default {
       }
       vm.registering = true
       if (vm.data.registered) {
-        vm.$parent.simplePost('/api/user/unregister/', () => {
+        vm.$parent.simplePost(vm.$global.urls.unregister(vm.data.id), () => {
           vm.$parent.getDetails(() => {
             vm.registering = false
           })
         })
       } else {
-        vm.$parent.simplePost('/api/user/register/', () => {
+        vm.$parent.simplePost(vm.$global.urls.register(vm.data.id), () => {
           vm.$parent.getDetails(() => {
             vm.registering = false
           })
@@ -130,7 +125,7 @@ export default {
     delActivity () {
       var vm = this
       vm.deleting = true
-      vm.$parent.simplePost('/api/publisher/delete/', () => {
+      vm.$parent.simplePost(vm.$global.urls.delete(vm.data.id), () => {
         vm.$root.$router.replace('/activity')
       })
     },

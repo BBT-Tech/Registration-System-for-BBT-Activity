@@ -5,9 +5,9 @@
   >
     <div class="image">
       <img
-        v-bind:src="imageUrl"
+        v-bind:src="data.image"
         v-on:load="$event.target.nextSibling.style.opacity = '1'"
-      /><div v-bind:style="{backgroundImage: 'url(' + imageUrl + ')'}"></div>
+      /><div v-bind:style="{backgroundImage: 'url(' + data.image + ')'}"></div>
     </div>
     <div class="content">
       <div class="title">{{ data.title }}</div>
@@ -34,17 +34,13 @@
 <script>
 export default {
   name: 'ActivityBar',
-  props: ['data'],
-  computed: {
-    imageUrl () {
-      return this.data.image === '' ? this.$global.defaultImg : this.data.image
-    }
-  }
+  props: ['data']
 }
 </script>
 
 <style scoped>
 .image {
+  background-color: #eee;
   position: absolute;
   top: 0;
   left: 0;

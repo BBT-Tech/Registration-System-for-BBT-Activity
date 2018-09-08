@@ -88,7 +88,7 @@ export default {
     },
     getDetails (fn) {
       var vm = this
-      vm.$http.post('/api/get-activity.php', {
+      vm.$http.post(vm.$global.urls.queryA(), {
         type: 0,
         start_id: vm.$route.params.id,
         number: 1
@@ -110,10 +110,8 @@ export default {
             } else if (vm.data.type === 1) {
               vm.timeBefore = vm.$global.compareDatetime(vm.data.book_time) > 0
             }
-            if (this.$global.isManager) {
-              return vm.$http.post('/api/department.php', {
-                id: vm.$route.params.id
-              })
+            if (vm.$global.isManager) {
+              return vm.$http.post(vm.$global.urls.queryD(vm.$route.params.id))
             }
           } else {
             vm.data = {}
@@ -137,9 +135,9 @@ export default {
         }
         if (data === 0) {
           setTimeout(() => {
-            this.$emit('con-fade-in')
+            vm.$emit('con-fade-in')
           }, 100)
-          this.inited = true
+          vm.inited = true
         } else if (data instanceof String) {
           alert(data)
         } else {
@@ -149,7 +147,7 @@ export default {
     },
     simplePost (route, fn) {
       var vm = this
-      vm.$http.post(route + vm.data.id).then(data => {
+      vm.$http.post(route).then(data => {
         data = data.body
         if (!(data instanceof Object)) {
           alert('服务器发生错误')
@@ -165,10 +163,6 @@ export default {
           fn()
         }
       })
-    },
-    getFile () {
-      var vm = this
-      vm.simplePost('/api/manager/download/')
     }
   }
 }

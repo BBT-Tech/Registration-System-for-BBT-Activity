@@ -269,14 +269,14 @@ export default {
       var url, send
       vm.loading = true
       if (vm.type === 0) {
-        url = '/api/publisher/modify/volunteer/' + vm.$route.params.id
+        url = vm.$global.urls.editV(vm.$route.params.id)
         send = {
           details: vm.crn.details,
           action_time: vm.$global.inputToDatetime(vm.crn.time),
           member: vm.crn.number
         }
       } else if (vm.type === 1) {
-        url = '/api/publisher/modify/award/' + vm.$route.params.id
+        url = vm.$global.urls.editA(vm.$route.params.id)
         send = {
           details: vm.crn.details,
           book_time: vm.$global.inputToDatetime(vm.crn.time),
@@ -294,7 +294,7 @@ export default {
           if (vm.crn.image !== '') {
             var fd = new FormData()
             fd.append('image', vm.image)
-            return vm.$http.post('/api/publisher/modify/image/' + vm.id, fd)
+            return vm.$http.post(vm.$global.urls.image(vm.id), fd)
           } else {
             return Promise.reject(0)
           }
@@ -322,7 +322,7 @@ export default {
     },
     checkActivity () {
       var vm = this
-      vm.$http.post('/api/get-activity.php', {
+      vm.$http.post(vm.$global.urls.queryA(), {
         type: 0,
         start_id: vm.$route.params.id,
         number: 1
@@ -359,7 +359,7 @@ export default {
             } else if (vm.type === 1) {
               vm.prev.time = vm.crn.time = vm.$global.datetimeToInput(activity.book_time)
               vm.prev.number = vm.crn.number = activity.award
-              return vm.$http.post('/api/department.php', {id: vm.id})
+              return vm.$http.post(vm.$global.urls.queryD(vm.id))
             }
           } else {
             return Promise.reject('活动不存在')

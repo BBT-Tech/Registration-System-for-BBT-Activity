@@ -88,9 +88,7 @@ export default {
     },
     getUserInfo (dep) {
       var vm = this
-      vm.$http.post('/api/get-department-user.php', {
-        department: dep
-      }).then(data => {
+      vm.$http.post(vm.$global.urls.queryU(dep)).then(data => {
         data = data.body
         if (!(data instanceof Object)) {
           return Promise.reject('服务器发生错误')
@@ -113,7 +111,7 @@ export default {
     },
     getFile () {
       var vm = this
-      vm.$parent.simplePost('/api/manager/download/')
+      vm.$parent.simplePost(vm.$global.urls.download(vm.data.id))
     }
   }
 }

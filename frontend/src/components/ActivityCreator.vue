@@ -228,7 +228,7 @@ export default {
       var url, send
       vm.loading = true
       if (vm.type === 0) {
-        url = '/api/manager/publish/volunteer'
+        url = this.$global.urls.publishV()
         send = {
           title: vm.title,
           details: vm.details,
@@ -236,7 +236,7 @@ export default {
           member: vm.number
         }
       } else if (vm.type === 1) {
-        url = '/api/manager/publish/award'
+        url = this.$global.urls.publishA()
         send = {
           title: vm.title,
           details: vm.details,
@@ -256,7 +256,7 @@ export default {
           if (vm.image !== '') {
             var fd = new FormData()
             fd.append('image', vm.image)
-            return vm.$http.post('/api/publisher/modify/image/' + vm.id, fd)
+            return vm.$http.post(this.$global.urls.image(vm.id), fd)
           } else {
             return Promise.reject(0)
           }

@@ -15,7 +15,31 @@ export default {
     '视频部',
     '视觉设计部'
   ],
-  defaultImg: 'http://localhost/api/assets/img/default.png',
+  urls: {
+    front: '/',
+    add (str) { return this.front + str },
+    // init () { return this.add('api/init') },
+    init () { return this.add('api/init.php') },
+    // login () { return this.add('api/login') },
+    login () { return this.add('api/login.php') },
+    // signout () { return this.add('api/signout') },
+    signout () { return this.add('api/signout.php') },
+    publishV () { return this.add('api/manager/publish/volunteer') },
+    publishA () { return this.add('api/manager/publish/award') },
+    image (id) { return this.add('api/publisher/modify/image/' + id) },
+    // queryA () { return this.add('api/user/query/activity') },
+    queryA () { return this.add('api/get-activity.php') },
+    // queryD (id) { return this.add('api/manager/query/' + id + '/department') },
+    queryD (id) { return this.add('api/department.php?id=' + id) },
+    // queryU (id) { return this.add('api/manager/query/' + id + '/userinfo') },
+    queryU (id) { return this.add('api/get-department-user.php?id=' + id) },
+    download (id) { return this.add('api/manager/download/' + id) },
+    register (id) { return this.add('api/user/register/' + id) },
+    unregister (id) { return this.add('api/user/unregister/' + id) },
+    editV (id) { return this.add('api/publisher/modify/volunteer/' + id) },
+    editA (id) { return this.add('api/publisher/modify/award/' + id) },
+    delete (id) { return this.add('api/publisher/delete/' + id) }
+  },
   getCookie (str) {
     var pattern = new RegExp('(?:(?:^|.*;\\s*)' + str + '\\s*=\\s*([^;]*).*$)|^.*$')
     return document.cookie.replace(pattern, '$1')

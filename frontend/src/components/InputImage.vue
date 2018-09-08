@@ -1,8 +1,11 @@
 <template>
-  <div
-    id="image-inputer-box"
-    v-bind:style="{backgroundImage: 'url(' + (first ? '' : src) + ')'}"
-  >
+  <div id="image-inputer-box">
+    <div class="image-bg">
+      <img
+        v-bind:src="realSrc"
+        v-on:load="$event.target.nextSibling.style.opacity = '1'"
+      /><div v-bind:style="{backgroundImage: 'url(' + realSrc + ')'}"></div>
+    </div>
     <input
       id="image-inputer"
       type="file"
@@ -46,6 +49,11 @@ export default {
     return {
       inputted: false,
       imageSrc: ''
+    }
+  },
+  computed: {
+    realSrc () {
+      return this.first ? '' : this.src
     }
   },
   created () {
@@ -113,10 +121,8 @@ export default {
 <style scoped>
 #image-inputer-box {
   cursor: default;
-  background: onload;
   background-position: center;
   background-size: cover;
-  background-color: #eee;
   position: relative;
   width: 100%;
   height: 100%;
@@ -125,7 +131,6 @@ export default {
   display: none;
 }
 .image {
-  background: onload;
   background-position: center;
   background-size: cover;
   position: absolute;
@@ -133,6 +138,22 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+}
+.image-bg {
+  background-color: #eee;
+  width: 100%;
+  height: 100%;
+}
+.image-bg > img {
+  display: none;
+}
+.image-bg > div {
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 0.8s;
 }
 .cover {
   background-color: rgba(0, 0, 0, 0.3);

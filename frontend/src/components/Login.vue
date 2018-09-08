@@ -78,7 +78,7 @@ export default {
       }
       var vm = this
       vm.loading = true
-      vm.$http.post('/api/login.php', {
+      vm.$http.post(vm.$global.urls.login(), {
         student_id: vm.studentId,
         password: vm.password
       }).then(data => {
