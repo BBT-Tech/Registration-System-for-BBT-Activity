@@ -204,6 +204,9 @@ export default {
     }
   },
   beforeRouteLeave (to, from, next) {
+    if (to.name === 'Login') {
+      next(false)
+    }
     if (this.saved || !this.edited ||
       confirm('确定放弃当前更改？')) {
       this.$emit('con-fade-out')
@@ -214,27 +217,24 @@ export default {
       next(false)
     }
   },
-  beforeCreate () {
-    if (!this.$global.logined) {
-      this.$root.$router.replace('/login')
-    }
-    if (!this.$global.isManager) {
-      this.$root.$router.replace('/activity/' + this.$route.params.id)
+  beforeRouteEnter (to, from, next) {
+    if (to.meta.isManager) {
+      next()
+    } else {
+      next(false)
     }
   },
   created () {
-    if (this.$global.logined && this.$global.isManager) {
-      this.checkActivity()
-      setTimeout(() => {
-        this.usedMeta.queryTypes = ['修改活动']
-        this.usedMeta.value = 0
-        this.usedMeta.back = this.back
-        this.usedMeta.flush = () => {}
-      }, 100)
-      setTimeout(() => {
-        this.$emit('nav-fade-in')
-      }, 200)
-    }
+    this.checkActivity()
+    setTimeout(() => {
+      this.usedMeta.queryTypes = ['修改活动']
+      this.usedMeta.value = 0
+      this.usedMeta.back = this.back
+      this.usedMeta.flush = () => {}
+    }, 100)
+    setTimeout(() => {
+      this.$emit('nav-fade-in')
+    }, 200)
   },
   methods: {
     isPosInt (number) {
@@ -293,7 +293,7 @@ export default {
         } else {
           if (vm.crn.image !== '') {
             var fd = new FormData()
-            fd.append('image', vm.image)
+            fd.append('image', vm.crn.image)
             return vm.$http.post(vm.$global.urls.image(vm.id), fd)
           } else {
             return Promise.reject(0)

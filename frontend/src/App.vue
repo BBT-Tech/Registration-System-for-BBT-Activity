@@ -2,7 +2,11 @@
   <div id="app">
     <div id="global-bg"></div>
     <router-view
+      class="main"
       v-bind:style="{fontSize: appWidth + 'px'}"
+      v-bind:class="{'show': !loading}"
+      v-on:main-fade-in="loading = false"
+      v-on:main-fade-out="loading = true"
     />
   </div>
 </template>
@@ -12,7 +16,8 @@ export default {
   name: 'App',
   data () {
     return {
-      appWidth: undefined
+      appWidth: undefined,
+      loading: true
     }
   },
   created () {
@@ -71,5 +76,14 @@ input {
   top: 0;
   left: 0;
   background: linear-gradient(145deg, #a1dd93, #16a086);
+}
+</style>
+<style scoped>
+.main {
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+.main.show {
+  opacity: 1;
 }
 </style>

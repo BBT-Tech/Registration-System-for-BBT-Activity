@@ -178,6 +178,9 @@ export default {
     }
   },
   beforeRouteLeave (to, from, next) {
+    if (to.name === 'Login') {
+      next(false)
+    }
     if (this.saved || (this.type === -1 && this.image === '') ||
       confirm('确定放弃当前工作？')) {
       this.$emit('con-fade-out')
@@ -188,26 +191,23 @@ export default {
       next(false)
     }
   },
-  beforeCreate () {
-    if (!this.$global.logined) {
-      this.$root.$router.replace('/login')
-    }
-    if (!this.$global.isManager) {
-      this.$root.$router.replace('/activity')
+  beforeRouteEnter (to, from, next) {
+    if (!to.meta.isManager) {
+      next(false)
+    } else {
+      next()
     }
   },
   created () {
-    if (this.$global.logined && this.$global.isManager) {
-      setTimeout(() => {
-        this.usedMeta.queryTypes = ['发起活动']
-        this.usedMeta.value = 0
-        this.usedMeta.back = this.back
-        this.usedMeta.flush = () => {}
-      }, 100)
-      setTimeout(() => {
-        this.$emit('nav-fade-in')
-      }, 200)
-    }
+    setTimeout(() => {
+      this.usedMeta.queryTypes = ['发起活动']
+      this.usedMeta.value = 0
+      this.usedMeta.back = this.back
+      this.usedMeta.flush = () => {}
+    }, 100)
+    setTimeout(() => {
+      this.$emit('nav-fade-in')
+    }, 200)
   },
   mounted () {
     setTimeout(() => {

@@ -1,6 +1,6 @@
 <template>
   <div id="activity">
-    <div id="loading-con">
+    <div id="loading-con" v-bind:class="{'hidden': !loading}">
       <loading class="loading" number="5"/>
     </div>
     <query-nav
@@ -9,14 +9,14 @@
       v-bind:nav-visible="navVisible"
       v-model="meta.value"
       v-on:back="meta.back()"
-      v-on:switch="fadeOut"
+      v-on:switch="loading = true"
       v-on:after-switch="meta.flush($event)"
     />
-    <div id="query-con">
+    <div id="query-con" v-bind:class="{'visible': !loading}">
       <router-view
         v-bind:meta="meta"
-        v-on:con-fade-in="fadeIn"
-        v-on:con-fade-out="fadeOut"
+        v-on:con-fade-in="loading = false"
+        v-on:con-fade-out="loading = true"
         v-on:nav-fade-in="navVisible = true"
         v-on:nav-fade-out="navVisible = false"
       />
@@ -29,6 +29,10 @@ import Nav from './Navigator.vue'
 import Loading from './Loading.vue'
 export default {
   name: 'Activity',
+  components: {
+    'query-nav': Nav,
+    'loading': Loading
+  },
   data () {
     return {
       meta: {
@@ -37,7 +41,8 @@ export default {
         back: null,
         flush: null
       },
-      navVisible: false
+      navVisible: false,
+      loading: true
     }
   },
   watch: {
@@ -47,19 +52,34 @@ export default {
       }
     }
   },
-  components: {
-    'query-nav': Nav,
-    'loading': Loading
-  },
-  methods: {
-    fadeOut () {
-      document.getElementById('query-con').style.opacity = ''
-      document.getElementById('loading-con').style.opacity = ''
-    },
-    fadeIn () {
-      document.getElementById('query-con').style.opacity = '1'
-      document.getElementById('loading-con').style.opacity = '0'
+  beforeRouteEnter (to, from, next) {
+    if (!to.meta.logined) {
+      next({
+        path: '/login',
+        replace: true
+      })
+    } else {
+      next()
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    if (to.name === 'Login') {
+      if (to.meta.logined) {
+        next(false)
+      } else {
+        this.$emit('main-fade-out')
+        setTimeout(() => {
+          next()
+        }, 200)
+      }
+    } else {
+      next()
+    }
+  },
+  created () {
+    setTimeout(() => {
+      this.$emit('main-fade-in')
+    }, 200)
   }
 }
 </script>
@@ -78,6 +98,9 @@ export default {
   opacity: 1;
   transition: opacity 0.1s;
 }
+#loading-con.hidden {
+  opacity: 0;
+}
 .loading {
   position: absolute;
   top: 50%;
@@ -89,5 +112,8 @@ export default {
   padding-top: 2.1em;
   opacity: 0;
   transition: opacity 0.1s;
+}
+#query-con.visible {
+  opacity: 1;
 }
 </style>

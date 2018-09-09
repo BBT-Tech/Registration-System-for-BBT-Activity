@@ -3,7 +3,7 @@
     <div id="activities">
       <div
         class="activity-bar"
-        v-if="$global.isManager && currentQueryType === 3"
+        v-if="$route.meta.isManager && currentQueryType === 3"
         v-on:click="$root.$router.push('/activity/publish')"
       >
         <img id="add-icon" src="@/assets/img/add-icon.png"/>
@@ -31,6 +31,17 @@
         </div>
       </div>
     </div>
+    <div class="center-tips" v-if="activities.length === 0">
+      <div v-if="currentQueryType === 2">
+        你还没有参加任何活动哦
+      </div>
+      <div v-else-if="currentQueryType === 3">
+        空空如也<br/><span>╰(￣▽￣)╮</span>快发起活动吧
+      </div>
+      <div v-else>
+        暂时还没有活动哦<br/>请耐心等待~
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,32 +56,29 @@ export default {
     'loading': Loading
   },
   beforeRouteLeave (to, from, next) {
-    this.$emit('con-fade-out')
-    setTimeout(() => {
+    if (to.name !== 'Login') {
+      this.$emit('con-fade-out')
+      setTimeout(() => {
+        next()
+      }, 100)
+    } else {
       next()
-    }, 100)
-  },
-  beforeCreate () {
-    if (!this.$global.logined) {
-      this.$root.$router.replace('/login')
     }
   },
   created () {
-    if (this.$global.logined) {
-      this.getActivity(false)
-      setTimeout(() => {
-        this.usedMeta.queryTypes = ['所有', '我参与', '未参与']
-        this.usedMeta.value = this.currentQueryType
-        this.usedMeta.back = this.signOut
-        this.usedMeta.flush = this.flushActivity
-        if (this.$global.isManager) {
-          this.usedMeta.queryTypes.push('我发起')
-        }
-      }, 100)
-      setTimeout(() => {
-        this.$emit('nav-fade-in')
-      }, 200)
-    }
+    this.getActivity(false)
+    setTimeout(() => {
+      this.usedMeta.queryTypes = ['所有', '未参与', '我参与']
+      this.usedMeta.value = this.currentQueryType
+      this.usedMeta.back = this.signOut
+      this.usedMeta.flush = this.flushActivity
+      if (this.$route.meta.isManager) {
+        this.usedMeta.queryTypes.push('我发起')
+      }
+    }, 100)
+    setTimeout(() => {
+      this.$emit('nav-fade-in')
+    }, 200)
   },
   data () {
     return {
@@ -88,7 +96,7 @@ export default {
       var result = Number(this.$global.getCookie('query_type'))
       if (isNaN(result) || result % 1 !== 0 || result < 0 || result > 3) {
         return 0
-      } else if (!this.$global.isManager && result === 3) {
+      } else if (!this.$route.meta.isManager && result === 3) {
         return 0
       } else {
         return result
@@ -105,10 +113,10 @@ export default {
           } else if (data.err_code) {
             alert(data.err_msg)
           } else {
-            vm.$global.logined = false
-            vm.$global.studentId = ''
-            vm.$global.name = ''
-            vm.$global.isManager = false
+            vm.$route.meta.logined = false
+            vm.$route.meta.studentId = ''
+            vm.$route.meta.name = ''
+            vm.$route.meta.isManager = false
             vm.$root.$router.replace('/login')
           }
         }).catch(data => {
@@ -143,8 +151,10 @@ export default {
             vm.currentStartId = 0
             vm.isQueryEnd = true
           }
-          vm.activities = vm.activities.concat(data.activities)
-          vm.currentStartId = data.activities.slice(-1)[0].id - 1
+          if (data.activities.length > 0) {
+            vm.activities = vm.activities.concat(data.activities)
+            vm.currentStartId = data.activities.slice(-1)[0].id - 1
+          }
           vm.isQueryEnd = data.is_end
           setTimeout(() => {
             vm.$emit('con-fade-in')
@@ -167,6 +177,7 @@ export default {
 </script>
 
 <style scoped>
+@import '../assets/css/CenterTips.css';
 #activities {
   margin: 0 0.96em;
   padding-bottom: 0.6em;

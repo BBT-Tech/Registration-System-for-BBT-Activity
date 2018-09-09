@@ -25,22 +25,25 @@ router.beforeEach((() => {
         } else {
           data = data.data
           if (data.logined) {
-            Global.logined = true
-            Global.studentId = data.student_id
-            Global.name = data.name
-            Global.isManager = data.is_manager
+            to.meta.logined = true
+            to.meta.studentId = data.student_id
+            to.meta.name = data.name
+            // to.meta.isManager = true
+            to.meta.isManager = data.is_manager
           }
         }
         if (to.fullPath === '/login') {
-          if (Global.logined) {
+          if (to.meta.logined) {
             next({
-              path: '/activity'
+              path: '/activity',
+              replace: true
             })
           }
         } else {
-          if (!Global.logined) {
+          if (!to.meta.logined) {
             next({
-              path: '/login'
+              path: '/login',
+              replace: true
             })
           } else if (to.fullPath.search(/^\/activity\/\d+\/edit$/) !== -1) {
             return Vue.http.post(Global.urls.queryA(), {
@@ -83,12 +86,15 @@ router.beforeEach((() => {
         } else {
           alert('服务器发生错误')
           next({
-            path: '/activity/' + to.params.id
+            path: '/activity/' + to.params.id,
+            replace: true
           })
         }
+        next()
       })
+    } else {
+      next()
     }
-    next()
   }
 })())
 

@@ -5,9 +5,9 @@
   >
     <div class="image">
       <img
-        v-bind:src="data.image"
+        v-bind:src="$global.urls.imageSrc(data.image)"
         v-on:load="$event.target.nextSibling.style.opacity = '1'"
-      /><div v-bind:style="{backgroundImage: 'url(' + data.image + ')'}"></div>
+      /><div v-bind:style="{backgroundImage: 'url(' + $global.urls.imageSrc(data.image) + ')'}"></div>
     </div>
     <div class="content">
       <div class="title">{{ data.title }}</div>
@@ -46,8 +46,6 @@ export default {
   left: 0;
   height: 100%;
   width: 4.26667em;
-  border-top-left-radius: 0.24em;
-  border-bottom-left-radius: 0.24em;
 }
 .image > img {
   display: none;
@@ -59,6 +57,8 @@ export default {
   background-size: cover;
   opacity: 0;
   transition: opacity 0.8s;
+  border-top-left-radius: 0.24em;
+  border-bottom-left-radius: 0.24em;
 }
 .content {
   position: absolute;

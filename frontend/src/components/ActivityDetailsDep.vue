@@ -1,9 +1,13 @@
 <template>
   <div>
     <div class="content">
-      <div class="button-export" v-on:click="getFile">
+      <a
+        class="button-export"
+        download
+        v-bind:href="$global.urls.download(data.id)"
+      >
         <div>导出参与用户信息</div>
-      </div>
+      </a>
       <div
         class="dep-part"
         v-for="(current, index) in data.current_member_list"
@@ -88,7 +92,9 @@ export default {
     },
     getUserInfo (dep) {
       var vm = this
-      vm.$http.post(vm.$global.urls.queryU(dep)).then(data => {
+      vm.$http.post(vm.$global.urls.queryU(vm.data.id), {
+        department: dep
+      }).then(data => {
         data = data.body
         if (!(data instanceof Object)) {
           return Promise.reject('服务器发生错误')
@@ -99,7 +105,6 @@ export default {
           vm.$set(vm.loadingList, dep, false)
         }
       }).catch(data => {
-        console.log(data)
         if (data instanceof String) {
           alert(data)
         } else {
@@ -108,10 +113,6 @@ export default {
         vm.$set(vm.openedList, dep, false)
         vm.$set(vm.loadingList, dep, false)
       })
-    },
-    getFile () {
-      var vm = this
-      vm.$parent.simplePost(vm.$global.urls.download(vm.data.id))
     }
   }
 }
@@ -122,6 +123,7 @@ export default {
   margin: 0 0.96em;
 }
 .button-export {
+  display: block;
   cursor: default;
   margin: 0.4em 0;
   width: 5.2em;

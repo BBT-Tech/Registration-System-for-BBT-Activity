@@ -1,0 +1,22 @@
+.center-tips {
+  z-index: -1;
+  position: fixed;
+  width: 100%;
+  top: 2.1em;
+  bottom: 0;
+  left: 0;
+}
+.center-tips > div {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.8em;
+  font-weight: bold;
+  line-height: 1.5em;
+}
+.center-tips span {
+  font-weight: normal;
+}

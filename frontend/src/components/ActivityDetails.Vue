@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="not-exist" v-if="!isActivityExist">
-      你访问的活动已被删除
+    <div class="center-tips" v-if="!isActivityExist">
+      <div>这个活动逃离了地球</div>
     </div>
     <details-main
       v-else-if="currentQueryType === 0 && inited"
@@ -47,25 +47,24 @@ export default {
     }
   },
   beforeRouteLeave (to, from, next) {
-    this.$emit('con-fade-out')
-    setTimeout(() => {
-      next()
-    }, 100)
-  },
-  beforeCreate () {
-    if (!this.$global.logined) {
-      this.$root.$router.replace('/login')
+    if (to.name === 'Login') {
+      next(false)
+    } else {
+      this.$emit('con-fade-out')
+      setTimeout(() => {
+        next()
+      }, 100)
     }
   },
   created () {
-    if (this.$global.logined) {
+    if (this.$route.meta.logined) {
       this.getDetails()
       setTimeout(() => {
         this.usedMeta.queryTypes = ['活动详情']
         this.usedMeta.value = 0
         this.usedMeta.back = this.back
         this.usedMeta.flush = this.query
-        if (this.$global.isManager) {
+        if (this.$route.meta.isManager) {
           this.usedMeta.queryTypes.push('各部门情况')
         }
       }, 100)
@@ -110,7 +109,7 @@ export default {
             } else if (vm.data.type === 1) {
               vm.timeBefore = vm.$global.compareDatetime(vm.data.book_time) > 0
             }
-            if (vm.$global.isManager) {
+            if (vm.$route.meta.isManager) {
               return vm.$http.post(vm.$global.urls.queryD(vm.$route.params.id))
             }
           } else {
@@ -127,6 +126,7 @@ export default {
         } else {
           vm.depData = data.data
           vm.$set(vm.depData, 'type', vm.data.type)
+          vm.$set(vm.depData, 'id', vm.data.id)
         }
         return Promise.reject(0)
       }).catch(data => {
@@ -169,11 +169,5 @@ export default {
 </script>
 
 <style scoped>
-.not-exist {
-  margin: 0.6em 1.37143em 0;
-  font-size: 0.7em;
-  font-weight: bold;
-  color: #fff;
-  line-height: 1em;
-}
+@import '../assets/css/CenterTips.css';
 </style>

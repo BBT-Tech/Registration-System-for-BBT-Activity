@@ -2,9 +2,9 @@
   <div id="details-main">
     <div class="image">
       <img
-        v-bind:src="data.image"
+        v-bind:src="$global.urls.imageSrc(data.image)"
         v-on:load="$event.target.nextSibling.style.opacity = '1'"
-      /><div v-bind:style="{backgroundImage: 'url(' + data.image + ')'}"></div>
+      /><div v-bind:style="{backgroundImage: 'url(' + $global.urls.imageSrc(data.image) + ')'}"></div>
     </div>
     <div class="content">
       <div class="title">{{ data.title }}</div>
@@ -31,9 +31,9 @@
         <div>已领取人数：{{ data.current_member }}/{{ data.award }}</div>
         <div>状态：<span
             v-if="data.registered"
-          >已领奖</span><span
+          >已领取</span><span
             v-else-if="before"
-          >领奖时间未到</span><span
+          >领取时间未到</span><span
             v-else-if="data.award === data.current_member"
           >奖品已被领完</span><span
             v-else-if="data.is_department_full"
@@ -58,8 +58,8 @@
           v-else-if="data.type === 1"
           v-on:click="before || registering || register()"
         >
-          <div class="text reg" v-if="!data.registered">领奖</div>
-          <div class="text del sml" v-else>放弃奖品</div>
+          <div class="text reg" v-if="!data.registered">领取</div>
+          <div class="text del sml" v-else>放弃</div>
         </div>
       </div>
       <div class="buttons" v-if="data.is_publisher">
@@ -98,9 +98,6 @@ export default {
     }, 100)
   },
   methods: {
-    foo (target) {
-      console.log(target)
-    },
     register () {
       var vm = this
       if ((vm.data.type === 0 && !vm.before) ||
@@ -123,11 +120,13 @@ export default {
       }
     },
     delActivity () {
-      var vm = this
-      vm.deleting = true
-      vm.$parent.simplePost(vm.$global.urls.delete(vm.data.id), () => {
-        vm.$root.$router.replace('/activity')
-      })
+      if (confirm('确定删除这个活动？')) {
+        var vm = this
+        vm.deleting = true
+        vm.$parent.simplePost(vm.$global.urls.delete(vm.data.id), () => {
+          vm.$root.$router.replace('/activity')
+        })
+      }
     },
     editActivity () {
       if (this.before) {

@@ -51,11 +51,34 @@ export default {
       loading: false
     }
   },
-  beforeCreate () {
-    var vm = this
-    if (vm.$global.logined) {
-      vm.$root.$router.replace('/activity')
+  beforeRouteEnter (to, from, next) {
+    if (to.meta.logined) {
+      next({
+        path: '/activity',
+        replace: true
+      })
+    } else {
+      next()
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    if (to.name !== 'Login') {
+      if (!to.meta.logined) {
+        next(false)
+      } else {
+        this.$emit('main-fade-out')
+        setTimeout(() => {
+          next()
+        }, 200)
+      }
+    } else {
+      next()
+    }
+  },
+  created () {
+    setTimeout(() => {
+      this.$emit('main-fade-in')
+    }, 200)
   },
   mounted () {
     window.addEventListener('keydown', this.pressEnter)
@@ -93,10 +116,10 @@ export default {
           }
         } else {
           data = data.data
-          vm.$global.logined = true
-          vm.$global.studentId = vm.studentId
-          vm.$global.name = data.name
-          vm.$global.isManager = data.is_manager
+          vm.$route.meta.logined = true
+          vm.$route.meta.studentId = vm.studentId
+          vm.$route.meta.name = data.name
+          vm.$route.meta.isManager = data.is_manager
           window.removeEventListener('keydown', vm.pressEnter)
           vm.$root.$router.replace('/activity')
         }

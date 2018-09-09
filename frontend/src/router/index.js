@@ -9,12 +9,20 @@ const ActivityEditor = () => import('@/components/ActivityEditor')
 
 Vue.use(Router)
 
+const Meta = {
+  logined: false,
+  studengId: '',
+  name: '',
+  isManager: false
+}
+
 export default new Router({
   routes: [
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: Login,
+      meta: Meta
     },
     {
       path: '/activity',
@@ -24,33 +32,25 @@ export default new Router({
           path: '',
           name: 'ActivityHome',
           component: ActivityHome,
-          meta: {
-            queryTypes: ['所有', '我参与', '未参与']
-          }
+          meta: Meta
         },
         {
           path: 'publish',
           name: 'ActivityCreator',
           component: ActivityCreator,
-          meta: {
-            queryTypes: ['发起活动']
-          }
+          meta: Meta
         },
         {
           path: ':id/edit',
           name: 'ActivityEditor',
           component: ActivityEditor,
-          meta: {
-            queryTypes: ['修改活动']
-          }
+          meta: Meta
         },
         {
           path: ':id',
           name: 'ActivityDetails',
           component: ActivityDetails,
-          meta: {
-            queryTypes: ['活动详情', '各部门情况']
-          }
+          meta: Meta
         }
       ]
     },
