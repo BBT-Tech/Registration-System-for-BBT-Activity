@@ -45,18 +45,18 @@
       <div class="buttons">
         <div
           class="button"
-          v-bind:class="{'dis': !before || registering}"
+          v-bind:class="{'dis': regVDis}"
           v-if="data.type === 0"
-          v-on:click="!before || registering || register()"
+          v-on:click="regVDis || register()"
         >
           <div class="text reg" v-if="!data.registered">报名</div>
           <div class="text del sml" v-else>取消报名</div>
         </div>
         <div
           class="button"
-          v-bind:class="{'dis': before || registering}"
+          v-bind:class="{'dis': regADis}"
           v-else-if="data.type === 1"
-          v-on:click="before || registering || register()"
+          v-on:click="regADis || register()"
         >
           <div class="text reg" v-if="!data.registered">领取</div>
           <div class="text del sml" v-else>放弃</div>
@@ -90,6 +90,18 @@ export default {
     return {
       registering: false,
       deleting: false
+    }
+  },
+  computed: {
+    regVDis () {
+      return this.registering || !this.before ||
+        (this.data.member === this.data.current_member &&
+        !this.data.registered)
+    },
+    regADis () {
+      return this.registering || this.before ||
+        (this.data.award === this.data.current_member &&
+        !this.data.registered)
     }
   },
   mounted () {

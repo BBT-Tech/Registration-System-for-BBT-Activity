@@ -97,8 +97,8 @@ export default {
       }
       return function (file) {
         return new Promise((resolve, reject) => {
-          if (file.size >= 204800) {
-            reject('图片大小应小于200KB')
+          if (file.size >= 1048576) {
+            reject('图片大小应小于1MB')
           } else {
             var reader = new FileReader()
             reader.onload = () => {

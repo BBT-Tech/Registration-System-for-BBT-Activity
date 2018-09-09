@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/root': {
-        target: 'http://localhost/rsba',
+        target: 'http://localhost/rsbab',
         changeOrigin: true,
         pathRewrite: {
           '^/root': ''
