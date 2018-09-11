@@ -14,17 +14,17 @@ class RSBAExportController extends Controller
 {
     public function export0(Request $request)
     {
-        if (User::where('name',$request->session()->get('name'))->first()->department!=7)
-        return abort(404);
+        if (User::where('name', $request->session()->get('name'))->first()->department != 7)
+            return abort(404);
         return (new RSBAExport)->download('百步梯活动管理系统' . date('Y-m-d H:i:s') . '.xlsx');
     }
-    public function export1($id)
+    public function export1(Request $request, $id)
     {
-        if (User::where('name',$request->session()->get('name'))->first()->department!=7)
-        return abort(404);
-        return (new ActivityUserExport($id))->download(Activity::find($id)->title . '-人员报名表-' . date('Y-m-d h:i:s') . '.xlsx');
+        if (User::where('name', $request->session()->get('name'))->first()->department != 7)
+            return abort(404);
+        return (new ActivityUserExport($id))->download(Activity::find($id)->title . '-人员报名表-' . date('Y-m-d H:i:s') . '.xlsx');
     }
-    public function export($id)
+    public function export(Request $request, $id)
     {
         $users = Activity::find($id)->user()->select('name', 'stuno', 'department', 'tele')->get();
         $content = '姓名,学号,部门,手机' . "\n";
@@ -35,7 +35,7 @@ class RSBAExportController extends Controller
             $content .= $user->tele . "\t\n";
         }
         $content = iconv("UTF-8", "GBK//IGNORE", $content);
-        $title = Activity::find($id)->first()->title . '-人员报名表-'.date('Y-m-d h:i:s');
+        $title = Activity::find($id)->title . '-人员报名表-' . date('Y-m-d H:i:s');
         return response($content)
             ->withHeaders([
                 'Content-type' => 'text/csv;charset=GB2312',

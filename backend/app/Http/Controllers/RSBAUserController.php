@@ -108,13 +108,6 @@ class RSBAUserController extends Controller
             $member = $activity->member;
             $award = $activity->member;
             $current = $activity->current_member;
-            /* if (($current >= $member) || ($current >= $award)) {
-                $errcode = 1;
-                $errmsg = '总人数已达上限哦！';
-            } else if (($mn->{$user->department} >= $ml->{$user->department}) && ($activity->type == 1)) {
-                $errcode = 2;
-                $errmsg = '部门人数已达上限哦！';
-            } else { */
             $activity->current_member--;
             $mn->{'dep' . $user->department}--;
             $activity->save();
