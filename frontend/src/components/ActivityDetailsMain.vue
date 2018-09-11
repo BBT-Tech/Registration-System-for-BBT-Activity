@@ -11,7 +11,7 @@
       <div class="options" v-if="data.type === 0">
         <div>类型：志愿者活动</div>
         <div>详情：{{ data.details }}</div>
-        <div>志愿开始时间：{{ data.action_time }}</div>
+        <div>报名截止时间：{{ data.action_time }}</div>
         <div>已报名人数：{{ data.current_member }}/{{ data.member }}</div>
         <div>状态：<span
             v-if="data.registered"

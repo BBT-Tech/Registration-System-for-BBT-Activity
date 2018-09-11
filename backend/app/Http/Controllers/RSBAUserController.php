@@ -44,7 +44,7 @@ class RSBAUserController extends Controller
         ]);
         $sum = 0;
         $errcode = -1;
-        $errmsg = '完了，凉凉';
+        $errmsg = '服务器被挤爆了！';
         DB::transaction(function () use ($activity, $user, $id, $name, &$errcode, &$errmsg) {
             $ml = MemberList::find($id);
             $mn = MemberNow::find($id);
@@ -154,19 +154,22 @@ class RSBAUserController extends Controller
             case 1:
                 $activities = Activity::whereDoesntHave('user', function ($query) use ($user) {
                     $query->where('name', $user->name);
-                })->orderBy('id', 'desc')
+                })->where('id', '<=', $startid)
+                    ->orderBy('id', 'desc')
                     ->take($request->number + 1)
                     ->get();
                 break;
             case 2:
                 $activities = Activity::whereHas('user', function ($query) use ($user) {
                     $query->where('name', $user->name);
-                })->orderBy('id', 'desc')
+                })->where('id', '<=', $startid)
+                    ->orderBy('id', 'desc')
                     ->take($request->number + 1)
                     ->get();
                 break;
             case 3:
                 $activities = Activity::where('publisher', $user->name)
+                    ->where('id', '<=', $startid)    
                     ->orderBy('id', 'desc')
                     ->take($request->number + 1)
                     ->get();
