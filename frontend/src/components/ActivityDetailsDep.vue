@@ -1,13 +1,9 @@
 <template>
   <div>
     <div class="content">
-      <a
-        class="button-export"
-        download
-        v-bind:href="$global.urls.download(data.id)"
-      >
+      <div class="button-export" v-on:click="download">
         <div>导出参与用户信息</div>
-      </a>
+      </div>
       <div
         class="dep-part"
         v-for="(current, index) in data.current_member_list"
@@ -113,6 +109,13 @@ export default {
         vm.$set(vm.openedList, dep, false)
         vm.$set(vm.loadingList, dep, false)
       })
+    },
+    download () {
+      if (navigator.userAgent.match(/MicroMessenger/i) !== null) {
+        alert('微信自带浏览器不支持该文件下载，请点击右上方按钮切换到其他浏览器进行操作')
+      } else {
+        location.href = this.$global.urls.download(this.data.id)
+      }
     }
   }
 }
