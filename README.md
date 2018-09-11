@@ -9,5 +9,7 @@
     - 加一点调味料`create.sql`
     - 加佐料`composer install`
     - 加佐料`php artisan key:generate`
+    - 再加点盐`chmod -R 777 .`
     - `storage/app/RSBA-img/0`是一张默认的桌布，不喜欢可以换掉，新的也叫`0`
+    - 开始食用
 - 嗝~
