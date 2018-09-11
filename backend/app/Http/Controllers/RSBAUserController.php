@@ -49,12 +49,12 @@ class RSBAUserController extends Controller
             $ml = MemberList::find($id);
             $mn = MemberNow::find($id);
             $member = $activity->member;
-            $award = $activity->member;
+            $award = $activity->award;
             $current = $activity->current_member;
-            if (($current >= $member) || ($current >= $award)) {
+            if ((($current >= $member) && ($activity->type == 0)) || (($current >= $award) && ($activity->type == 1))) {
                 $errcode = 1;
                 $errmsg = '总人数已达上限哦！';
-            } else if (($mn->{$user->department} >= $ml->{$user->department}) && ($activity->type == 1)) {
+            } else if (($mn->{'dep' . $user->department} >= $ml->{'dep' . $user->department}) && ($activity->type == 1)) {
                 $errcode = 2;
                 $errmsg = '部门人数已达上限哦！';
             } else {

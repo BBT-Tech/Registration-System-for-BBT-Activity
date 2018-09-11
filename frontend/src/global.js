@@ -13,7 +13,7 @@ export default {
   ],
   urls: {
     // front: '/root/back/public',
-    front: 'back/public',
+    front: 'backend/public',
     add (str) { return this.front + str },
     init () { return this.add('/api/init') },
     login () { return this.add('/api/login') },
