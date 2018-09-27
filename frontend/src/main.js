@@ -42,6 +42,8 @@ router.beforeEach((() => {
           }
         } else {
           if (!to.meta.logined) {
+            to.meta.loginToRedirect = true
+            to.meta.loginRedirectPath = to.fullPath
             next({
               path: '/login',
               replace: true

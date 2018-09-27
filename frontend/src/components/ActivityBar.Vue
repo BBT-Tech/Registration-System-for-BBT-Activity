@@ -46,6 +46,8 @@ export default {
   left: 0;
   height: 100%;
   width: 4.26667em;
+  border-top-left-radius: 0.24em;
+  border-bottom-left-radius: 0.24em;
 }
 .image > img {
   display: none;

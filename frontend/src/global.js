@@ -13,7 +13,7 @@ export default {
   ],
   urls: {
     // front: '/root/back/public',
-    front: 'backend/public',
+    front: 'public',
     add (str) { return this.front + str },
     init () { return this.add('/api/init') },
     login () { return this.add('/api/login') },
@@ -60,9 +60,10 @@ export default {
     return 0
   },
   datetimeToInput (datetime) {
-    return datetime.replace(/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}):\d{2}$/, '$1T$2')
+    return datetime.slice(0, 10) + 'T' + datetime.slice(11, 16)
+    // return datetime.replace(/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}):\d{2}$/, '$1T$2')
   },
   inputToDatetime (input) {
-    return input.slice(0, 10) + ' ' + input.slice(11) + ':00'
+    return input.slice(0, 10) + ' ' + input.slice(11, 16) + ':00'
   }
 }

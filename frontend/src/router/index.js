@@ -13,7 +13,9 @@ const Meta = {
   logined: false,
   studengId: '',
   name: '',
-  isManager: false
+  isManager: false,
+  loginToRedirect: false,
+  loginRedirectPath: ''
 }
 
 export default new Router({

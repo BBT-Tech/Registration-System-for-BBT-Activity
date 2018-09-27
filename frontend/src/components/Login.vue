@@ -121,7 +121,12 @@ export default {
           vm.$route.meta.name = data.name
           vm.$route.meta.isManager = data.is_manager
           window.removeEventListener('keydown', vm.pressEnter)
-          vm.$root.$router.replace('/activity')
+          if (vm.$route.meta.loginToRedirect) {
+            vm.$root.$router.replace(vm.$route.meta.loginRedirectPath)
+            vm.$route.meta.loginToRedirect = false
+          } else {
+            vm.$root.$router.replace('/activity')
+          }
         }
         vm.loading = false
       }).catch(data => {
