@@ -1,3 +1,4 @@
-<Files *>
-  Options -Indexes
-</Files>
+RewriteEngine on
+Options All -Indexes
+
+RewriteRule ^(.*)$ ./public/index.php/$1/ [L]

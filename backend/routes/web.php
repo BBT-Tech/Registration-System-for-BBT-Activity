@@ -20,10 +20,6 @@ Route::get('/', function () {
 });
 
 
-Route::any('/download/{id}', 'RSBAExportController@export');
-Route::any('/time', function () {
-    return date('Y-m-d H:i:s');
-});
 
 Route::middleware('web')->group(function () {
 

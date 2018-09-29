@@ -13,12 +13,12 @@ class RequestValidate
         if ($type==0)$validate0=['title'=>'required|max:25'];
         else $validate0=[];
         $validate=[
-            'details'=>'required|max:100',
-            'action_time'=>'required_without:book_time|date_format:Y-m-d H:i:s|after:now',
-            'book_time'=>'required_without:action_time|date_format:Y-m-d H:i:s|after:now',
-            'member'=>'required_with:action_time|integer|min:0',
-            'award'=>'required_with:book_time|integer|min:0',
-            'member_list.*'=>'required_with:award|integer|min:0',
+            'details'=>'bail|required|max:100',
+            'action_time'=>'bail|required_without:book_time|date_format:Y-m-d H:i:s|after:now',
+            'book_time'=>'bail|required_without:action_time|date_format:Y-m-d H:i:s|after:now',
+            'member'=>'bail|required_with:action_time|integer|min:0',
+            'award'=>'bail|required_with:book_time|integer|min:0',
+            'member_list.*'=>'bail|required_with:award|integer|min:0',
             'member_list'=>[
                 'bail',
                 'required_with:award',
@@ -56,7 +56,7 @@ class RequestValidate
         if ($validator->fails()){
             $errcode=2;
             foreach ($validator->errors()->all() as $err)
-            $errmsg=$errmsg.$err.'<br>';
+            $errmsg=$errmsg.$err."\n";
             return response()->json([
                 'err_code'=>$errcode,
                 'err_msg'=>$errmsg

@@ -22,19 +22,19 @@ class RSBAExportController extends Controller
     {
         if (User::where('name', $request->session()->get('name'))->first()->department != 7)
             return abort(404);
-        return (new ActivityUserExport($id))->download(Activity::find($id)->title . '-人员报名表-' . date('Y-m-d H:i:s') . '.xlsx');
+        return (new ActivityUserExport($id))->download(Activity::find($id)->title . '-人员报名表-' . date('Y-m-d h:i:s') . '.xlsx');
     }
     public function export(Request $request, $id)
     {
         $users = Activity::find($id)->user()->select('name', 'stuno', 'department', 'tele')->get();
-        $content = '姓名,学号,部门,手机' . "\n";
+        $content = chr(239) . chr(187) . chr(191) . "姓名,学号,部门,手机\n";
         foreach ($users as $user) {
             $content .= $user->name . ',';
             $content .= $user->stuno . "\t" . ',';
             $content .= config('RSBA.' . $user->department) . ',';
             $content .= $user->tele . "\t\n";
         }
-        $content = iconv("UTF-8", "GBK//IGNORE", $content);
+        //$content = iconv("UTF-8", "GBK//IGNORE", $content);
         $title = Activity::find($id)->title . '-人员报名表-' . date('Y-m-d H:i:s');
         return response($content)
             ->withHeaders([
