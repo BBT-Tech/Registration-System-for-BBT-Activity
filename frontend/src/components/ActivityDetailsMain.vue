@@ -221,7 +221,7 @@ export default {
   line-height: 1.6383em;
   margin: 0.06494em 0;
 }
-.options > div > span {
+.options > div > span:first-child {
   font-weight: bold;
 }
 .buttons {
@@ -277,12 +277,6 @@ export default {
   border-radius: 0.53191em;
   box-shadow: 0.10638em 0.10638em 0.10638em rgba(0, 0, 0, 0.3);
   position: relative;
-}
-.copy-button > {
-  cursor: default;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
 }
 .copy-button > div {
   cursor: default;

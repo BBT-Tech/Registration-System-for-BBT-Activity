@@ -109,7 +109,7 @@ export default {
 }
 #query-con {
   width: 100%;
-  padding-top: 2.1em;
+  padding-top: 1.77em;
   opacity: 0;
   transition: opacity 0.1s;
 }

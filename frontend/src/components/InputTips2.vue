@@ -25,8 +25,13 @@
         </select>
         <div class="select-image" v-if="type === 'select'"></div>
       </div>
-      <div class="error">
-        <slot name="tips" v-if="!inputting && errWhen"></slot>
+      <div v-if="errWhen">
+        <div class="tips cor" v-if="inputting">
+          <slot name="cor"></slot>
+        </div>
+        <div class="tips err" v-else>
+          <slot name="err"></slot>
+        </div>
       </div>
     </div>
   </div>
@@ -49,6 +54,7 @@ export default {
   display: flex;
   width: 100%;
   height: 1.5em;
+  margin-bottom: 0.2em;
 }
 .flex-title {
   flex-shrink: 0;
@@ -88,7 +94,7 @@ input {
   line-height: 1em;
   padding: 0.116667em;
 }
-input[type="datetime-local"] {
+input[type=datetime-local] {
   appearance: none;
 }
 input[type=datetime-local]::-webkit-inner-spin-button {
@@ -115,11 +121,16 @@ select {
   background-origin: padding-box;
   background-size: 0.56em auto;
 }
-.error {
-  color: rgba(255, 0, 0, 0.6);
-  font-size: 0.5em;
+.tips {
+  font-size: 0.45em;
   font-weight: bold;
   position: relative;
   top: -0.1em;
+}
+.tips.err {
+  color: rgba(255, 0, 0, 0.6);
+}
+.tips.cor {
+  color: rgba(255, 255, 255, 0.6);
 }
 </style>

@@ -21,23 +21,26 @@
       <div v-if="type === 0 || type === 1">
         <input-tips v-model="title" v-bind:err-when="!isTitleValid">
           <template slot="title">标题：</template>
-          <span slot="tips" v-if="title === ''">标题不能为空</span>
-          <span slot="tips" v-else>标题应不超过{{ $global.limits.titleMax }}字符</span>
+          <span slot="err" v-if="title === ''">标题不能为空</span>
+          <span slot="err" v-else>标题应不超过{{ $global.limits.titleMax }}字符</span>
         </input-tips>
         <input-tips v-model="details" v-bind:err-when="!isDetailsValid">
           <template slot="title">详情：</template>
-          <span slot="tips" v-if="details === ''">详情不能为空</span>
-          <span slot="tips" v-else>详情应不超过{{ $global.limits.detailsMax }}字符</span>
+          <span slot="cor" v-if="type === 0">建议包含活动开始时间</span>
+          <span slot="err" v-if="details === ''">详情不能为空</span>
+          <span slot="err" v-else>详情应不超过{{ $global.limits.detailsMax }}字符</span>
         </input-tips>
         <input-tips type="datetime-local" v-model="time" v-bind:err-when="!isTimeValid">
           <template slot="title">时间：</template>
-          <span slot="tips" v-if="time === ''">时间信息不全</span>
-          <span slot="tips" v-else>时间必须晚于当前</span>
+          <span slot="cor" v-if="type === 0">输入报名截止时间</span>
+          <span slot="cor" v-else-if="type === 1">输入领取时间</span>
+          <span slot="err" v-if="time === ''">时间信息不全</span>
+          <span slot="err" v-else>时间必须晚于当前</span>
         </input-tips>
         <input-tips type="number" v-model.number="number" v-bind:err-when="!isNumberValid">
           <span slot="title" v-if="type === 0">限制人数：</span>
           <span slot="title" v-else-if="type === 1">奖品总数：</span>
-          <span slot="tips">数量应为正整数</span>
+          <span slot="err">数量应为正整数</span>
         </input-tips>
         <div v-if="type === 1">
           <input-tips type="select" v-model.number="inputType" v-bind:err-when="false">
@@ -54,7 +57,7 @@
               v-bind:err-when="!isSameValid"
             >
               <span slot="title">各个部门：</span>
-              <span slot="tips" v-if="!isNumberValid || isSumValid">数量应为正整数</span>
+              <span slot="err" v-if="!isNumberValid || isSumValid">数量应为正整数</span>
             </input-tips>
           </div>
           <div v-else-if="inputType === 2">
@@ -66,7 +69,7 @@
               >
                 <span slot="title">{{ $global.departmentList[i] }}：</span>
                 <span
-                  slot="tips"
+                  slot="err"
                   v-if="i !== 9 || (!isNumberValid || isSumValid)"
                 >数量应为正整数</span>
               </input-tips>
