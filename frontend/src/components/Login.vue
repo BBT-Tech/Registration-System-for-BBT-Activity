@@ -101,7 +101,7 @@ export default {
       }
       var vm = this
       vm.loading = true
-      vm.$http.post(vm.$global.urls.login(), {
+      vm.$http.post(vm.$global.apis.login(), {
         student_id: vm.studentId,
         password: vm.password
       }).then(data => {
@@ -112,7 +112,7 @@ export default {
           alert(data.err_msg)
         } else if (data.err_code < 0) {
           if (confirm(data.err_msg)) {
-            window.location.href = 'https://hemc.100steps.net/2013/bbter/users'
+            window.location.href = vm.$global.urls.emailRedirect
           }
         } else {
           data = data.data
@@ -182,7 +182,7 @@ export default {
   font-size: 0.72em;
   font-weight: bold;
   word-spacing: 0.25em;
-  color: #9dd98b;
+  color: #2fab88;
   position: relative;
 }
 .button-text {

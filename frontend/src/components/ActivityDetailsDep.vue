@@ -20,7 +20,7 @@
             v-if="current !== 0"
             class="dep-button"
             v-on:click="foldSwitch(index)"
-          ><img src="@/assets/img/arrow.png" v-bind:class="{'opened': openedList[index]}"/></div>
+          ><img src="@/assets/img/button-arrow.png" v-bind:class="{'opened': openedList[index]}"/></div>
         </div>
         <div v-if="openedList[index]">
           <div v-if="!loadingList[index]">
@@ -88,7 +88,7 @@ export default {
     },
     getUserInfo (dep) {
       var vm = this
-      vm.$http.post(vm.$global.urls.queryU(vm.data.id), {
+      vm.$http.post(vm.$global.apis.queryU(vm.data.id), {
         department: dep
       }).then(data => {
         data = data.body
@@ -114,7 +114,7 @@ export default {
       if (navigator.userAgent.match(/MicroMessenger/i) !== null) {
         alert('微信自带浏览器不支持该文件下载，请点击右上方按钮切换到其他浏览器进行操作')
       } else {
-        location.href = this.$global.urls.download(this.data.id)
+        location.href = this.$global.apis.download(this.data.id)
       }
     }
   }
@@ -141,8 +141,9 @@ export default {
   top: 50%;
   left: 0;
   transform: translateY(-50%);
-  color: #a1de93;
+  color: #2fab88;
   font-size: 0.6em;
+  font-weight: bold;
   width: 100%;
   text-align: center;
 }

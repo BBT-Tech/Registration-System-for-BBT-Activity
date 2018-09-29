@@ -103,7 +103,7 @@ export default {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  height: 2.1em;
+  height: 1.77em;
   width: 500px;
   overflow: hidden;
 }
@@ -130,7 +130,7 @@ export default {
 }
 img {
   position: absolute;
-  top: 0.96em;
+  top: 0.63em;
   left: 0.96em;
   width: 0.51em;
 }
@@ -159,7 +159,7 @@ img {
 }
 .options {
   position: absolute;
-  top: 0.9em;
+  top: 0.57em;
   left: 0;
   height: 0.83em;
   line-height: 0.83em;

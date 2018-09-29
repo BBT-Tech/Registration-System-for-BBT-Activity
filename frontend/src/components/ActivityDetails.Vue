@@ -87,7 +87,7 @@ export default {
     },
     getDetails (fn) {
       var vm = this
-      vm.$http.post(vm.$global.urls.queryA(), {
+      vm.$http.post(vm.$global.apis.queryA(), {
         type: 0,
         start_id: vm.$route.params.id,
         number: 1
@@ -110,7 +110,7 @@ export default {
               vm.timeBefore = vm.$global.compareDatetime(vm.data.book_time) > 0
             }
             if (vm.$route.meta.isManager) {
-              return vm.$http.post(vm.$global.urls.queryD(vm.$route.params.id))
+              return vm.$http.post(vm.$global.apis.queryD(vm.$route.params.id))
             }
           } else {
             vm.data = {}

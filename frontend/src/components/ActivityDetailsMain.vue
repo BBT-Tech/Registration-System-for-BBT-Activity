@@ -2,18 +2,24 @@
   <div id="details-main">
     <div class="image">
       <img
-        v-bind:src="$global.urls.imageSrc(data.image)"
+        v-bind:src="$global.apis.imageSrc(data.image)"
         v-on:load="$event.target.nextSibling.style.opacity = '1'"
-      /><div v-bind:style="{backgroundImage: 'url(' + $global.urls.imageSrc(data.image) + ')'}"></div>
+      /><div v-bind:style="{backgroundImage: 'url(' + $global.apis.imageSrc(data.image) + ')'}"></div>
     </div>
     <div class="content">
       <div class="title">{{ data.title }}</div>
       <div class="options" v-if="data.type === 0">
-        <div>类型：志愿者活动</div>
-        <div>详情：{{ data.details }}</div>
-        <div>报名截止时间：{{ data.action_time }}</div>
-        <div>已报名人数：{{ data.current_member }}/{{ data.member }}</div>
-        <div>状态：<span
+        <div><span>类型：</span>志愿者活动<div
+          class="copy-button"
+          v-bind:data-clipboard-text="copyValue"
+        >
+          <img src="@/assets/img/icon-copy.png"/>
+          <div>复制活动链接</div>
+        </div></div>
+        <div><span>详情：</span>{{ data.details }}</div>
+        <div><span>报名截止时间：</span>{{ data.action_time }}</div>
+        <div><span>已报名人数：</span>{{ data.current_member }}/{{ data.member }}</div>
+        <div><span>状态：</span><span
             v-if="data.registered"
           >已报名</span><span
             v-else-if="!before"
@@ -25,11 +31,17 @@
         </div>
       </div>
       <div class="options" v-else-if="data.type === 1">
-        <div>类型：福利活动</div>
-        <div>详情：{{ data.details }}</div>
-        <div>领取时间：{{ data.book_time }}</div>
-        <div>已领取人数：{{ data.current_member }}/{{ data.award }}</div>
-        <div>状态：<span
+        <div><span>类型：</span>福利活动<div
+          class="copy-button"
+          v-bind:data-clipboard-text="copyValue"
+        >
+          <img src="@/assets/img/icon-copy.png"/>
+          <div>复制活动链接</div>
+        </div></div>
+        <div><span>详情：</span>{{ data.details }}</div>
+        <div><span>领取时间：</span>{{ data.book_time }}</div>
+        <div><span>已领取人数：</span>{{ data.current_member }}/{{ data.award }}</div>
+        <div><span>状态：</span><span
             v-if="data.registered"
           >已领取</span><span
             v-else-if="before"
@@ -83,13 +95,16 @@
 </template>
 
 <script>
+import ClipboardJS from 'clipboard'
 export default {
   name: 'DetailsMain',
   props: ['data', 'before'],
   data () {
     return {
       registering: false,
-      deleting: false
+      deleting: false,
+      clipboard: null,
+      copyValue: ''
     }
   },
   computed: {
@@ -108,6 +123,17 @@ export default {
     setTimeout(() => {
       this.$emit('con-fade-in')
     }, 100)
+    this.copyValue = location.href
+    this.clipboard = new ClipboardJS('.copy-button')
+    this.clipboard.on('success', e => {
+      alert('复制成功')
+    })
+    this.clipboard.on('error', e => {
+      alert('复制失败，换个浏览器试试吧')
+    })
+  },
+  beforeDestroy () {
+    this.clipboard.destroy()
   },
   methods: {
     register () {
@@ -118,13 +144,13 @@ export default {
       }
       vm.registering = true
       if (vm.data.registered) {
-        vm.$parent.simplePost(vm.$global.urls.unregister(vm.data.id), () => {
+        vm.$parent.simplePost(vm.$global.apis.unregister(vm.data.id), () => {
           vm.$parent.getDetails(() => {
             vm.registering = false
           })
         })
       } else {
-        vm.$parent.simplePost(vm.$global.urls.register(vm.data.id), () => {
+        vm.$parent.simplePost(vm.$global.apis.register(vm.data.id), () => {
           vm.$parent.getDetails(() => {
             vm.registering = false
           })
@@ -135,7 +161,7 @@ export default {
       if (confirm('确定删除这个活动？')) {
         var vm = this
         vm.deleting = true
-        vm.$parent.simplePost(vm.$global.urls.delete(vm.data.id), () => {
+        vm.$parent.simplePost(vm.$global.apis.delete(vm.data.id), () => {
           vm.$root.$router.replace('/activity')
         })
       }
@@ -195,6 +221,9 @@ export default {
   line-height: 1.6383em;
   margin: 0.06494em 0;
 }
+.options > div > span {
+  font-weight: bold;
+}
 .buttons {
   width: 100%;
   height: 0.86em;
@@ -227,7 +256,7 @@ export default {
   transform: translate(-50%, -50%);
 }
 .button > .reg {
-  color: #a1de93;
+  color: #2fab88;
 }
 .button > .del {
   color: #ce938f;
@@ -237,5 +266,43 @@ export default {
 }
 .button > .sml {
   font-size: 0.53em;
+}
+.copy-button {
+  display: inline-block;
+  width: 7.65957em;
+  height: 1.2766em;
+  vertical-align: -20%;
+  margin-left: 1em;
+  background-color: #fff;
+  border-radius: 0.53191em;
+  box-shadow: 0.10638em 0.10638em 0.10638em rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+.copy-button > {
+  cursor: default;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.copy-button > div {
+  cursor: default;
+  position: absolute;
+  top: 50%;
+  right: 0.43769em;
+  height: 0.9em;
+  transform: translateY(-50%);
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #515151;
+  background-color: rgba(255, 0, 0, 0);
+  line-height: 1em;
+  letter-spacing: 0.07em;
+}
+.copy-button > img {
+  position: absolute;
+  top: 50%;
+  left: 0.31915em;
+  height: 1em;
+  transform: translateY(-50%);
 }
 </style>

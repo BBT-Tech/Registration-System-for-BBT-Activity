@@ -109,7 +109,7 @@ select {
   top: 0;
   height: 0.9em;
   width: 0.9em;
-  background-image: url(../assets/img/unfold.png);
+  background-image: url(../assets/img/icon-unfold.png);
   background-position: center;
   background-repeat: no-repeat;
   background-origin: padding-box;

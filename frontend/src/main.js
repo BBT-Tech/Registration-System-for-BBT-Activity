@@ -17,7 +17,7 @@ router.beforeEach((() => {
   return (to, from, next) => {
     if (!isChecked) {
       isChecked = true
-      Vue.http.post(Global.urls.init()).then(data => {
+      Vue.http.post(Global.apis.init()).then(data => {
         data = data.body
         if (!(data instanceof Object)) {
           return Promise.reject('服务器发生错误')
@@ -29,8 +29,8 @@ router.beforeEach((() => {
             to.meta.logined = true
             to.meta.studentId = data.student_id
             to.meta.name = data.name
-            // to.meta.isManager = true
-            to.meta.isManager = data.is_manager
+            to.meta.isManager = true
+            // to.meta.isManager = data.is_manager
           }
         }
         if (to.fullPath === '/login') {
@@ -49,7 +49,7 @@ router.beforeEach((() => {
               replace: true
             })
           } else if (to.fullPath.search(/^\/activity\/\d+\/edit$/) !== -1) {
-            return Vue.http.post(Global.urls.queryA(), {
+            return Vue.http.post(Global.apis.queryA(), {
               type: 0,
               start_id: to.params.id,
               number: 1

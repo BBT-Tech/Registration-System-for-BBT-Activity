@@ -31,7 +31,7 @@
       <input-tips v-model="crn.details" v-bind:err-when="!isDetailsValid">
         <template slot="title">详情：</template>
         <span slot="tips" v-if="crn.details === ''">详情不能为空</span>
-        <span slot="tips" v-else>详情应不超过100字符</span>
+        <span slot="tips" v-else>详情应不超过{{ $global.limits.detailsMax }}字符</span>
       </input-tips>
       <input-tips type="datetime-local" v-model="crn.time" v-bind:err-when="!isTimeValid">
         <template slot="title">时间：</template>
@@ -147,7 +147,7 @@ export default {
   },
   computed: {
     isDetailsValid () {
-      return this.crn.details !== ''
+      return this.crn.details !== '' && this.crn.details.length <= this.$global.limits.detailsMax
     },
     isTimeValid () {
       return this.time !== '' &&
@@ -166,7 +166,7 @@ export default {
     isSumValid () {
       var sum = 0
       if (this.inputType === 1) {
-        sum = this.same * 10
+        sum = this.same * this.$global.departmentList.length
       } else if (this.inputType === 2) {
         this.crn.numberList.forEach(value => {
           if (value !== '') {
@@ -252,7 +252,7 @@ export default {
       var vm = this
       if (vm.type === 1) {
         let i
-        for (i = 0; i < 10; i++) {
+        for (i = 0; i < this.$global.departmentList.length; i++) {
           if (vm.prev.numberList[i] !== vm.crn.numberList[i]) {
             vm.isListEdited = true
             return
@@ -269,14 +269,14 @@ export default {
       var url, send
       vm.loading = true
       if (vm.type === 0) {
-        url = vm.$global.urls.editV(vm.$route.params.id)
+        url = vm.$global.apis.editV(vm.$route.params.id)
         send = {
           details: vm.crn.details,
           action_time: vm.$global.inputToDatetime(vm.crn.time),
           member: vm.crn.number
         }
       } else if (vm.type === 1) {
-        url = vm.$global.urls.editA(vm.$route.params.id)
+        url = vm.$global.apis.editA(vm.$route.params.id)
         send = {
           details: vm.crn.details,
           book_time: vm.$global.inputToDatetime(vm.crn.time),
@@ -294,7 +294,7 @@ export default {
           if (vm.crn.image !== '') {
             var fd = new FormData()
             fd.append('image', vm.crn.image)
-            return vm.$http.post(vm.$global.urls.image(vm.id), fd)
+            return vm.$http.post(vm.$global.apis.image(vm.id), fd)
           } else {
             return Promise.reject(0)
           }
@@ -322,7 +322,7 @@ export default {
     },
     checkActivity () {
       var vm = this
-      vm.$http.post(vm.$global.urls.queryA(), {
+      vm.$http.post(vm.$global.apis.queryA(), {
         type: 0,
         start_id: vm.$route.params.id,
         number: 1
@@ -359,7 +359,7 @@ export default {
             } else if (vm.type === 1) {
               vm.prev.time = vm.crn.time = vm.$global.datetimeToInput(activity.book_time)
               vm.prev.number = vm.crn.number = activity.award
-              return vm.$http.post(vm.$global.urls.queryD(vm.id))
+              return vm.$http.post(vm.$global.apis.queryD(vm.id))
             }
           } else {
             return Promise.reject('活动不存在')

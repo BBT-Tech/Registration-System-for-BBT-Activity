@@ -1,4 +1,9 @@
 export default {
+  flushActivityNumber: 6,
+  limits: {
+    titleMax: 25,
+    detailsMax: 100
+  },
   departmentList: [
     '编辑部',
     '综合管理部',
@@ -12,8 +17,11 @@ export default {
     '视觉设计部'
   ],
   urls: {
-    // front: '/root/back/public',
-    front: 'public',
+    emailRedirect: 'https://hemc.100steps.net/2013/bbter/users'
+  },
+  apis: {
+    front: '/root/back/public',
+    // front: 'public',
     add (str) { return this.front + str },
     init () { return this.add('/api/init') },
     login () { return this.add('/api/login') },

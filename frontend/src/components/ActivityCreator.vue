@@ -22,12 +22,12 @@
         <input-tips v-model="title" v-bind:err-when="!isTitleValid">
           <template slot="title">标题：</template>
           <span slot="tips" v-if="title === ''">标题不能为空</span>
-          <span slot="tips" v-else>标题应不超过25字符</span>
+          <span slot="tips" v-else>标题应不超过{{ $global.limits.titleMax }}字符</span>
         </input-tips>
         <input-tips v-model="details" v-bind:err-when="!isDetailsValid">
           <template slot="title">详情：</template>
           <span slot="tips" v-if="details === ''">详情不能为空</span>
-          <span slot="tips" v-else>详情应不超过100字符</span>
+          <span slot="tips" v-else>详情应不超过{{ $global.limits.detailsMax }}字符</span>
         </input-tips>
         <input-tips type="datetime-local" v-model="time" v-bind:err-when="!isTimeValid">
           <template slot="title">时间：</template>
@@ -115,7 +115,7 @@ export default {
       number: 0,
       inputType: 1,
       same: 0,
-      numberList: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      numberList: [],
       loading: false,
       saved: false,
       id: 0
@@ -137,10 +137,10 @@ export default {
   },
   computed: {
     isTitleValid () {
-      return this.title !== '' && this.title.length <= 25
+      return this.title !== '' && this.title.length <= this.$global.limits.titleMax
     },
     isDetailsValid () {
-      return this.details !== '' && this.details.length <= 100
+      return this.details !== '' && this.details.length <= this.$global.limits.detailsMax
     },
     isTimeValid () {
       return this.time !== '' &&
@@ -155,7 +155,7 @@ export default {
     isSumValid () {
       var sum = 0
       if (this.inputType === 1) {
-        sum = this.same * 10
+        sum = this.same * this.$global.departmentList.length
       } else if (this.inputType === 2) {
         this.numberList.forEach(value => {
           if (value !== '') {
@@ -199,6 +199,9 @@ export default {
     }
   },
   created () {
+    this.$global.departmentList.forEach(value => {
+      this.numberList.push(0)
+    })
     setTimeout(() => {
       this.usedMeta.queryTypes = ['发起活动']
       this.usedMeta.value = 0
@@ -228,7 +231,7 @@ export default {
       var url, send
       vm.loading = true
       if (vm.type === 0) {
-        url = this.$global.urls.publishV()
+        url = this.$global.apis.publishV()
         send = {
           title: vm.title,
           details: vm.details,
@@ -236,7 +239,7 @@ export default {
           member: vm.number
         }
       } else if (vm.type === 1) {
-        url = this.$global.urls.publishA()
+        url = this.$global.apis.publishA()
         send = {
           title: vm.title,
           details: vm.details,
@@ -256,7 +259,7 @@ export default {
           if (vm.image !== '') {
             var fd = new FormData()
             fd.append('image', vm.image)
-            return vm.$http.post(this.$global.urls.image(vm.id), fd)
+            return vm.$http.post(this.$global.apis.image(vm.id), fd)
           } else {
             return Promise.reject(0)
           }
@@ -274,7 +277,7 @@ export default {
         vm.loading = false
         if (data === 0) {
           vm.saved = true
-          vm.$root.$router.push('/activity/' + vm.id)
+          vm.$root.$router.replace('/activity/' + vm.id)
         } else if (typeof data === 'string') {
           alert(data)
         } else {

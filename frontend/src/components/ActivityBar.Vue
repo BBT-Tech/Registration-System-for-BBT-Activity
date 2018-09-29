@@ -5,10 +5,12 @@
   >
     <div class="image">
       <img
-        v-bind:src="$global.urls.imageSrc(data.image)"
+        v-bind:src="$global.apis.imageSrc(data.image)"
         v-on:load="$event.target.nextSibling.style.opacity = '1'"
-      /><div v-bind:style="{backgroundImage: 'url(' + $global.urls.imageSrc(data.image) + ')'}"></div>
+      /><div v-bind:style="{backgroundImage: 'url(' + $global.apis.imageSrc(data.image) + ')'}"></div>
     </div>
+    <div class="tag vol" v-if="data.type === 0"></div>
+    <div class="tag awd" v-else-if="data.type === 1"></div>
     <div class="content">
       <div class="title">{{ data.title }}</div>
       <div class="info time">
@@ -39,6 +41,21 @@ export default {
 </script>
 
 <style scoped>
+.tag {
+  position: absolute;
+  top: -0.02em;
+  left: -0.02em;
+  width: 1.02em;
+  height: 0.85em;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+}
+.tag.vol {
+  background-image: url(../assets/img/tag-volunteer.png);
+}
+.tag.awd {
+  background-image: url(../assets/img/tag-award.png);
+}
 .image {
   background-color: #eee;
   position: absolute;
@@ -90,10 +107,10 @@ export default {
   position: relative;
 }
 .time {
-  background-image: url(../assets/img/clock-icon.png);
+  background-image: url(../assets/img/icon-clock.png);
 }
 .member {
-  background-image: url(../assets/img/member-icon.png);
+  background-image: url(../assets/img/icon-member.png);
 }
 .info > div {
   position: absolute;

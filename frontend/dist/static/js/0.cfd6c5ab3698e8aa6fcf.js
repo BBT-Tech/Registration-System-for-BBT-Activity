@@ -1,2 +1,0 @@
-webpackJsonp([0],{NxGh:function(t,a,n){"use strict";var s={render:function(){var t=this.$createElement,a=this._self._c||t;return a("div",{staticClass:"loading"},this._l(Number(this.number),function(t){return a("div",{key:"ball"+t,staticClass:"ball-container"},[a("div",{staticClass:"ball",style:{animationDelay:-t/10+"s"}})])}))},staticRenderFns:[]};var e=n("VU/8")({name:"Loading",props:["number"]},s,!1,function(t){n("ah+r")},"data-v-014bc7fb",null);a.a=e.exports},"ah+r":function(t,a){}});
-//# sourceMappingURL=0.cfd6c5ab3698e8aa6fcf.js.map

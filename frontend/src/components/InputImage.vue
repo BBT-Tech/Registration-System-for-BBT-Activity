@@ -2,9 +2,12 @@
   <div id="image-inputer-box">
     <div class="image-bg">
       <img
-        v-bind:src="$global.urls.imageSrc(realSrc)"
+        v-bind:src="$global.apis.imageSrc(realSrc)"
         v-on:load="$event.target.nextSibling.style.opacity = '1'"
-      /><div v-bind:style="{backgroundImage: 'url(' + $global.urls.imageSrc(realSrc) + ')'}"></div>
+      /><div
+        v-if="!inputted"
+        v-bind:style="{backgroundImage: 'url(' + $global.apis.imageSrc(realSrc) + ')'}"
+      ></div>
     </div>
     <input
       id="image-inputer"

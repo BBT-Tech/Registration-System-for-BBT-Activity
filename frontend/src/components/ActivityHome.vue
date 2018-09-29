@@ -6,7 +6,7 @@
         v-if="$route.meta.isManager && currentQueryType === 3"
         v-on:click="$root.$router.push('/activity/publish')"
       >
-        <img id="add-icon" src="@/assets/img/add-icon.png"/>
+        <img id="add-icon" src="@/assets/img/icon-add.png"/>
         <div id="add-text-box">
           <div id="add-text">添加活动</div>
         </div>
@@ -42,6 +42,7 @@
         暂时还没有活动哦<br/>请耐心等待~
       </div>
     </div>
+    <div class="t-zai"></div>
   </div>
 </template>
 
@@ -85,7 +86,6 @@ export default {
       usedMeta: this.meta,
       currentQueryType: this.getCookieQueryType(),
       currentStartId: 0,
-      queryNumber: 6,
       isQueryEnd: true,
       activities: [],
       loading: true
@@ -106,7 +106,7 @@ export default {
       if (confirm('确定退出？')) {
         var vm = this
         vm.$global.removeCookie('query_type')
-        vm.$http.post(vm.$global.urls.signout()).then(data => {
+        vm.$http.post(vm.$global.apis.signout()).then(data => {
           data = data.body
           if (!(data instanceof Object)) {
             alert('服务器发生错误')
@@ -133,10 +133,10 @@ export default {
         vm.currentQueryType = index
         vm.currentStartId = 0
       }
-      vm.$http.post(vm.$global.urls.queryA(), {
+      vm.$http.post(vm.$global.apis.queryA(), {
         type: vm.currentQueryType,
         start_id: vm.currentStartId,
-        number: vm.queryNumber
+        number: vm.$global.flushActivityNumber
       }).then(data => {
         data = data.body
         if (!(data instanceof Object)) {
@@ -192,8 +192,7 @@ export default {
   background-color: #fff;
   box-shadow: 0.1em 0.1em 0.25em rgba(80, 80, 80, 0.5);
   position: relative;
-  color: #a1de93;
-  overflow: hidden;
+  color: #2fab88;
 }
 #add-icon {
   position: absolute;
@@ -245,11 +244,28 @@ export default {
 .get-activity-img {
   display: inline-block;
   vertical-align: top;
-  background-image: url(../assets/img/down.png);
+  background-image: url(../assets/img/icon-down.png);
   background-position: 0 0.05em;
   background-size: auto 97.1831%;
   background-repeat: no-repeat;
   height: 0.71em;
   width: 0.64em;
+}
+.t-zai {
+  display: none;
+  position: fixed;
+  z-index: -1;
+  right: 0;
+  bottom: -0.01em;;
+  width: 2.03em;
+  height: 2.06em;
+  background-image: url(../assets/img/icon-t-zai.png);
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+@media screen and (max-width: 500px) {
+  .t-zai {
+    display: block;
+  }
 }
 </style>
