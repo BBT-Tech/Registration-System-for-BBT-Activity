@@ -29,8 +29,8 @@ router.beforeEach((() => {
             to.meta.logined = true
             to.meta.studentId = data.student_id
             to.meta.name = data.name
-            to.meta.isManager = true
-            // to.meta.isManager = data.is_manager
+            // to.meta.isManager = true
+            to.meta.isManager = data.is_manager
           }
         }
         if (to.fullPath === '/login') {

@@ -20,8 +20,8 @@ export default {
     emailRedirect: 'https://hemc.100steps.net/2013/bbter/users'
   },
   apis: {
-    front: '/root/back/public',
-    // front: 'public',
+    // front: '/root/back/public',
+    front: 'public',
     add (str) { return this.front + str },
     init () { return this.add('/api/init') },
     login () { return this.add('/api/login') },
